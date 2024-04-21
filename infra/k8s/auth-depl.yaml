@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth
+  template:
+    metadata:
+      labels:
+        app: auth
+    spec:
+      containers:
+        - name: auth
+          image: semiheimer/auth
+          env:
+            - name: NODE_ENV
+              value: "development"
+            - name: MONGO_URI
+              value: mongodb://auth-mongo-srv:27017/auth
+          envFrom:
+            - secretRef:
+                name: jwt-secret
+            # - name: JWT_KEY
+            #   valueFrom:
+            #     secretKeyRef:
+            #       name: jwt-secret
+            #       key: JWT_KEY
+            # - name: REFRESH_KEY
+            #   valueFrom:
+            #     secretKeyRef:
+            #       name: jwt-secret
+            #       key: REFRESH_KEY
+            # - name: ACCESS_KEY
+            #   valueFrom:
+            #     secretKeyRef:
+            #       name: jwt-secret
+            #       key: ACCESS_KEY
+            # - name: ACCESS_JWT_EXPIRES_IN
+            #   valueFrom:
+            #     secretKeyRef:
+            #       name: jwt-secret
+            #       key: ACCESS_JWT_EXPIRES_IN
+            # - name: REFRESH_JWT_EXPIRES_IN
+            #   valueFrom:
+            #     secretKeyRef:
+            #       name: jwt-secret
+            #       key: REFRESH_JWT_EXPIRES_IN
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-srv
+spec:
+  selector:
+    app: auth
+  ports:
+    - name: auth
+      protocol: TCP
+      port: 3000
+      targetPort: 3000

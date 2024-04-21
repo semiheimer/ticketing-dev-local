@@ -1,0 +1,42 @@
+{
+  "name": "expiration",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start4": "nodemon --exec ts-node-dev src/index.ts",
+    "start1": "tsc --watch && node dist/index.js",
+    "start3": "tsc && node ./dist/index.js",
+    "start:dev": "nodemon --exec pnpm run start",
+    "build": "tsc -w",
+    "start2": "ts-node src/index.ts",
+    "start5": "nodemon --exec ts-node src/index.ts",
+    "test": "jest --watchAll --no-cache",
+    "test1": "jest --watchAll --no-cache ticket.test.ts",
+    "start": "ts-node-dev --poll src/index.ts"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "setupFilesAfterEnv": [
+      "./src/test/setup.ts"
+    ]
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@semiheimerco/common": "^1.0.18",
+    "@types/bull": "^4.10.0",
+    "@types/node": "^20.11.5",
+    "bull": "^4.12.2",
+    "http-status-codes": "^2.3.0",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.3.3"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.11",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.1"
+  }
+}

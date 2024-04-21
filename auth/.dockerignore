@@ -1,0 +1,4 @@
+node_modules
+setup.ts
+test/
+__test__/

@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orders-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orders
+  template:
+    metadata:
+      labels:
+        app: orders
+    spec:
+      containers:
+        - name: orders
+          image: semiheimer/orders
+          env:
+            - name: NATS_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NATS_URL
+              value: "http://nats-srv:4222"
+            - name: NATS_CLUSTER_ID
+              value: ticketing
+            - name: MONGO_URI
+              value: mongodb://orders-mongo-srv:27017/orders
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY
+            - name: REFRESH_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: REFRESH_KEY
+            - name: ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: ACCESS_KEY
+            - name: ACCESS_JWT_EXPIRES_IN
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: ACCESS_JWT_EXPIRES_IN
+            - name: REFRESH_JWT_EXPIRES_IN
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: REFRESH_JWT_EXPIRES_IN
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: orders-srv
+spec:
+  selector:
+    app: orders
+  ports:
+    - name: orders
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
