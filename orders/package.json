@@ -12,7 +12,7 @@
     "start2": "ts-node src/index.ts",
     "start5": "nodemon --exec ts-node src/index.ts",
     "test": "jest --watchAll --no-cache",
-    "test1": "jest --watchAll --no-cache delete.test.ts",
+    "test1": "jest --detectOpenHandles expiration-complete-listener.test.ts",
     "start": "ts-node-dev --poll src/index.ts"
   },
   "jest": {
@@ -42,7 +42,6 @@
     "http-status-codes": "^2.3.0",
     "js-cookie": "^3.0.5",
     "jsonwebtoken": "^9.0.2",
-    "mongodb-memory-server": "^9.1.6",
     "mongoose": "^8.1.0",
     "mongoose-update-if-current": "^1.4.0",
     "ts-node-dev": "^2.0.0",
@@ -52,7 +51,7 @@
     "@types/jest": "^29.5.11",
     "@types/supertest": "^6.0.2",
     "jest": "^29.7.0",
-    "mongodb-memory-server": "^6.9.6",
+    "mongodb-memory-server": "^9.1.6",
     "supertest": "^6.3.4",
     "ts-jest": "^29.1.1"
   }

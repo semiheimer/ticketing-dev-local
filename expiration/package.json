@@ -27,7 +27,6 @@
   "license": "ISC",
   "dependencies": {
     "@semiheimerco/common": "^1.0.18",
-    "@types/bull": "^4.10.0",
     "@types/node": "^20.11.5",
     "bull": "^4.12.2",
     "http-status-codes": "^2.3.0",
