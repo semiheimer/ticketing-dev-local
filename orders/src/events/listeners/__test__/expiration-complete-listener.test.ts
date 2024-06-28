@@ -51,6 +51,7 @@ it('emit an OrderCancelled event', async () => {
 
   expect(natsWrapper.client.publish).toHaveBeenCalled();
 
+  // {"id":"667e5966f63cc01a5b465ab7","version":1,"ticket":{"id":"667e5966f63cc01a5b465ab4"}
   const eventData = JSON.parse(
     (natsWrapper.client.publish as jest.Mock).mock.calls[0][1]
   );

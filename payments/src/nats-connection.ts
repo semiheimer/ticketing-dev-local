@@ -1,9 +1,6 @@
 import { natsWrapper } from "./nats-wrapper";
-import { TicketCreatedListener } from "./events/listeners/ticket-created-listener";
-import { TicketUpdatedListener } from "./events/listeners/ticket-updated-listener";
-import { ExpirationCompleteListener } from "./events/listeners/expiration-complete-listener";
 
-const natsConnection = async function () {
+export async function natsConnection() {
   if (!process.env.NATS_CLIENT_ID) {
     throw new Error("NATS_CLIENT_ID must be defined");
   }
@@ -35,14 +32,11 @@ const natsConnection = async function () {
       console.log("NATS connection closed!");
       process.exit();
     });
+
     process.on("SIGINT", () => natsWrapper.client.close());
     process.on("SIGTERM", () => natsWrapper.client.close());
-    new TicketCreatedListener(natsWrapper.client).listen();
-    new TicketUpdatedListener(natsWrapper.client).listen();
-    new ExpirationCompleteListener(natsWrapper.client).listen();
+
   } catch (error) {
     console.error(error);
   }
-};
-
-export { natsConnection };
+}

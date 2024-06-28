@@ -10,8 +10,9 @@ import { Ticket } from "../models/ticket-model";
 import { Order } from "../models/order-model";
 import { OrderCreatedPublisher } from "../events/publishers/order-created-publisher";
 import { natsWrapper } from "../nats-wrapper";
+import { EXPIRATION_WINDOW_SECONDS } from "../constants";
 
-const EXPIRATION_WINDOW_SECONDS = 15 * 60;
+
 
 const router = express.Router();
 
