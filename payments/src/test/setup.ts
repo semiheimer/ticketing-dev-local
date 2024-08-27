@@ -2,10 +2,12 @@ import { JWT } from "@semiheimerco/common";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
 
+// declare global {
+//   function signin(): Promise<string>;
+// }
 declare global {
-  function signin(): Promise<string>;
+  var signin: (id?: string) => string[];
 }
-
 jest.mock("../nats-wrapper");
 
 let mongo: any;
