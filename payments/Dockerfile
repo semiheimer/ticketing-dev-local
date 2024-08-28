@@ -2,12 +2,26 @@ FROM node:alpine
 
 WORKDIR /app
 
-COPY package.json .
-RUN npm install --omit=dev
-RUN npm audit fix
-COPY . .
+COPY package*.json ./
 
-CMD ["npm","start"]
+# NPM cache'ini kullanarak bağımlılıkları yükleyin
+RUN npm install --omit=dev --cache /app/.npm-cache
+
+COPY . .
+CMD ["npm", "start"]
+
+# FROM node:alpine
+
+# WORKDIR /app
+
+# COPY package*.json .
+
+# # RUN npm install --omit=dev
+# # RUN npm audit fix
+# RUN npm ci
+# COPY . .
+
+# CMD ["npm","start"]
 
 # FROM node:alpine as base
 

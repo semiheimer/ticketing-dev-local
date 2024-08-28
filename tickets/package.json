@@ -14,7 +14,7 @@
     "test": "jest --watchAll --no-cache",
     "test1": "jest --watchAll --no-cache ticket.test.ts",
     "start": "ts-node-dev --poll src/index.ts",
-    "update":"npx npm-check-updates -u"
+    "update": "npx npm-check-updates -u"
   },
   "jest": {
     "preset": "ts-jest",
@@ -48,6 +48,7 @@
     "@types/jest": "^29.5.12",
     "@types/supertest": "^6.0.2",
     "jest": "^29.7.0",
+    "mongodb-memory-server": "^10.0.0",
     "supertest": "^7.0.0",
     "ts-jest": "^29.2.5"
   }

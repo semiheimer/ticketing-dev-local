@@ -22,11 +22,13 @@ beforeAll(async () => {
 
 beforeEach(async () => {
   jest.clearAllMocks();
-  const collections = await mongoose.connection.db.collections();
-
-  for (let collection of collections) {
-    await collection.deleteMany({});
+  if (mongoose.connection.db) {
+    await mongoose.connection.db.dropDatabase();
+  } else {
+    throw new Error("Database connection is not established.");
   }
+
+
 });
 
 afterAll(async () => {

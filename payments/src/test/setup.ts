@@ -1,55 +1,34 @@
 import { JWT } from "@semiheimerco/common";
-import { MongoMemoryServer } from "mongodb-memory-server";
+
 import mongoose from "mongoose";
-
-// declare global {
-//   function signin(): Promise<string>;
-// }
+import { CLIENT_RENEG_LIMIT } from "tls";
+process.env.MONGOMS_DOWNLOAD_DIR = "./semihcan";
+// Global declaration for the signin function
 declare global {
-  var signin: (id?: string) => string[];
+  function signin(): Promise<string>;
 }
-jest.mock("../nats-wrapper");
 
-let mongo: any;
+jest.mock("../nats-wrapper");
 
 beforeAll(async () => {
   process.env.ACCESS_KEY = "asdfasdf";
   process.env.ACCESS_JWT_EXPIRES_IN = "3d";
-  process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
-  mongo = await MongoMemoryServer.create();
-
-  const mongoUri = mongo.getUri();
-  if (mongoUri === undefined) throw new Error("['MONGO_URI'] is undefined ")
-
-  await mongoose.connect(mongoUri, {}).catch((err) => {
-    if (err) {
-        console.error(err);
-        process.exit(1);
-    }
-});
-  
-
+  await mongoose.connect("mongodb://localhost:27017/payments");
 });
 
 beforeEach(async () => {
-  jest.clearAllMocks();
-  await mongoose.connection.db.dropDatabase();
-  // const collections = await mongoose.connection.db.collections();
-
-  // for (let collection of collections) {
-  //   await collection.deleteMany({});
-  // }
+  if (mongoose.connection.db) {
+    await mongoose.connection.db.dropDatabase();
+  } else {
+    throw new Error("Database connection is not established.");
+  }
 });
 
 afterAll(async () => {
-
-  if (mongo) {
-    await mongo.stop();
-  }
-
-  // await mongoose.connection.close();
   await mongoose.disconnect();
+  jest.clearAllTimers();
+  jest.useRealTimers();
 });
 
 global.signin = async () => {
@@ -60,6 +39,5 @@ global.signin = async () => {
 
   const token = JWT.createAccessJWT(payload);
   const cookie = `session=${token}`;
-  return cookie;
+  return cookie; // Return a single string as per function definition
 };
-

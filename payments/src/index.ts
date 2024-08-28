@@ -3,6 +3,7 @@ import { app } from "./app";
 import { natsConnection } from "./nats-connection";
 
 async function startServer() {
+
   if (!process.env.MONGO_URI) {
     throw new Error("MONGO_URI must be defined");
   }
