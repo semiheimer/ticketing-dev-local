@@ -1,6 +1,5 @@
 export * from "./errors/custom-error";
 export * from "./errors/custom-errors";
-
 export * from "./middlewares/current-user";
 export * from "./middlewares/error-handler";
 export * from "./middlewares/require-auth";
@@ -18,3 +17,4 @@ export * from "./events/types/order-status";
 export * from "./events/order-cancelled-event";
 export * from "./events/order-created-event";
 export * from "./events/expiration-complete-event";
+export * from "./events/payment-created-event";

@@ -4,18 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start4": "nodemon --exec ts-node-dev src/index.ts",
-    "start1": "tsc --watch && node dist/index.js",
-    "start3": "tsc && node ./dist/index.js",
-    "start:dev": "nodemon --exec pnpm run start",
-    "build": "tsc -w",
-    "start2": "ts-node src/index.ts",
-    "start5": "nodemon --exec ts-node src/index.ts",
-    "test": "jest --watchAll --no-cache",
-    "test1": "jest --watchAll --detectOpenHandles order-created-listener.test.ts",
     "start": "ts-node-dev --poll src/index.ts",
+    "test": "jest --watchAll --no-cache",
+    "test1": "jest --watchAll --detectOpenHandles",
     "update": "npx npm-check-updates -u",
-    "test2": "jest --detectOpenHandles order-created-listener.test.ts"
+    "test2": "jest --watchAll new.test.ts"
   },
   "jest": {
     "preset": "ts-jest",
@@ -28,7 +21,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@semiheimerco/common": "^1.0.18",
+    "@semiheimerco/common": "^1.0.22",
     "@types/cookie-parser": "^1.4.7",
     "@types/express": "^4.17.21",
     "@types/jsonwebtoken": "^9.0.6",

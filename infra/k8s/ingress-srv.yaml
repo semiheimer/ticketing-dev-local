@@ -21,6 +21,13 @@ spec:
             pathType: ImplementationSpecific
             backend:
               service:
+                name: payments-srv
+                port:
+                  number: 3000
+          - path: /api/payments/?(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
                 name: auth-srv
                 port:
                   number: 3000

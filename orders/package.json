@@ -14,7 +14,7 @@
     "test": "jest --watchAll --no-cache",
     "test1": "jest --watchAll --detectOpenHandles expiration-complete-listener.test.ts",
     "start": "ts-node-dev --poll src/index.ts",
-    "update":"npx npm-check-updates -u"
+    "update": "npx npm-check-updates -u"
   },
   "jest": {
     "preset": "ts-jest",
@@ -27,7 +27,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@semiheimerco/common": "^1.0.18",
+    "@semiheimerco/common": "^1.0.22",
     "@types/cookie-parser": "^1.4.7",
     "@types/cors": "^2.8.17",
     "@types/express": "^4.17.21",

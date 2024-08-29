@@ -1,11 +1,10 @@
 import { JWT } from "@semiheimerco/common";
-
 import mongoose from "mongoose";
-import { CLIENT_RENEG_LIMIT } from "tls";
+
 process.env.MONGOMS_DOWNLOAD_DIR = "./semihcan";
 // Global declaration for the signin function
 declare global {
-  function signin(): Promise<string>;
+  function signin(id?: string): Promise<string>;
 }
 
 jest.mock("../nats-wrapper");
@@ -31,9 +30,9 @@ afterAll(async () => {
   jest.useRealTimers();
 });
 
-global.signin = async () => {
+global.signin = async (id?: string) => {
   const payload = {
-    id: new mongoose.Types.ObjectId().toHexString(),
+    id: id || new mongoose.Types.ObjectId().toHexString(),
     email: "test@test.com",
   };
 

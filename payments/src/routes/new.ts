@@ -1,8 +1,6 @@
 import express, { Request, Response } from "express";
-import { body } from "express-validator";
 import {
   requireAuth,
-  withValidationErrors,
   BadRequestError,
   UnauthorizedError,
   NotFoundError,
@@ -13,16 +11,15 @@ import { Order } from "../models/order";
 import { Payment } from "../models/payment";
 import { PaymentCreatedPublisher } from "../events/publishers/payment-created-publisher";
 import { natsWrapper } from "../nats-wrapper";
+import { validateRequest } from "../middlewares/validation-middleware";
+import { CLIENT_RENEG_LIMIT } from "tls";
 
 const router = express.Router();
 
 router.post(
   "/api/payments",
   requireAuth,
-  ...withValidationErrors([
-    body("token").not().isEmpty(),
-    body("orderId").not().isEmpty(),
-  ]),
+  ...validateRequest,
   async (req: Request, res: Response) => {
     const { token, orderId } = req.body;
 
@@ -31,6 +28,8 @@ router.post(
     if (!order) {
       throw new NotFoundError();
     }
+    console.log(order.userId, req.currentUser!.id);
+
     if (order.userId !== req.currentUser!.id) {
       throw new UnauthorizedError();
     }
@@ -43,6 +42,7 @@ router.post(
       amount: order.price * 100,
       source: token,
     });
+
     const payment = Payment.build({
       orderId,
       stripeId: charge.id,

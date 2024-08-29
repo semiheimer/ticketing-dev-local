@@ -14,7 +14,7 @@
     "test": "jest --watchAll --no-cache",
     "test1": "jest --watchAll --no-cache ticket.test.ts",
     "start": "ts-node-dev --poll src/index.ts",
-    "update":"npx npm-check-updates -u"
+    "update": "npx npm-check-updates -u"
   },
   "jest": {
     "preset": "ts-jest",
@@ -27,7 +27,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@semiheimerco/common": "^1.0.18",
+    "@semiheimerco/common": "^1.0.22",
     "@types/node": "^22.5.0",
     "bull": "^4.16.0",
     "http-status-codes": "^2.3.0",

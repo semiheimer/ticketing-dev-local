@@ -1,6 +1,6 @@
 {
   "name": "@semiheimerco/common",
-  "version": "1.0.18",
+  "version": "1.0.22",
   "description": "",
   "main": "./build/index.js",
   "types": "./build/index.d.ts",
@@ -14,13 +14,14 @@
     "clean": "rm -rf build/*",
     "pub": "npm version patch && npm run build && npm publish",
     "update": "npx npm-check-updates -u",
-    "fix": "npm audit fix"
+    "fix": "npm audit fix",
+    "update-microservices": "cd ../auth && npm install @semiheimerco/common@latest && cd ../tickets && npm install @semiheimerco/common@latest && cd ../payments && npm install @semiheimerco/common@latest && cd ../orders && npm install @semiheimerco/common@latest && cd ../expiration && npm install @semiheimerco/common@latest"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@semiheimerco/common": "^1.0.18",
+    "@semiheimerco/common": "^1.0.22",
     "@types/express": "^4.17.21",
     "@types/jsonwebtoken": "^9.0.5",
     "express": "^4.18.2",
