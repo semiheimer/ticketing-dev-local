@@ -2,8 +2,8 @@ import express, { Request, Response } from "express";
 import {
   requireAuth,
   BadRequestError,
-  UnauthorizedError,
   NotFoundError,
+  UnauthorizedError,
   OrderStatus,
 } from "@semiheimerco/common";
 import { stripe } from "../stripe";
@@ -12,7 +12,6 @@ import { Payment } from "../models/payment";
 import { PaymentCreatedPublisher } from "../events/publishers/payment-created-publisher";
 import { natsWrapper } from "../nats-wrapper";
 import { validateRequest } from "../middlewares/validation-middleware";
-import { CLIENT_RENEG_LIMIT } from "tls";
 
 const router = express.Router();
 

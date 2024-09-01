@@ -1,36 +1,52 @@
 import { JWT } from "@semiheimerco/common";
 import mongoose from "mongoose";
+import { MongoMemoryServer } from "mongodb-memory-server-core";
+import path from "path";
 
-process.env.MONGOMS_DOWNLOAD_DIR = "./semihcan";
 // Global declaration for the signin function
 declare global {
-  function signin(id?: string): Promise<string>;
+  function signin(id?: string): string;
 }
 
 jest.mock("../nats-wrapper");
+let mongoDb: MongoMemoryServer;
 
-beforeAll(async () => {
-  process.env.ACCESS_KEY = "asdfasdf";
-  process.env.ACCESS_JWT_EXPIRES_IN = "3d";
-
-  await mongoose.connect("mongodb://localhost:27017/payments");
-});
-
-beforeEach(async () => {
-  if (mongoose.connection.db) {
-    await mongoose.connection.db.dropDatabase();
-  } else {
-    throw new Error("Database connection is not established.");
+const connect = async () => {
+  try {
+    mongoDb = await MongoMemoryServer.create({
+      binary: {
+        version: "7.0.6", // İndirdiğiniz MongoDB sürümü
+        downloadDir: path.resolve(__dirname, "mongodb-memory-server"), // Binary dosyalarını koyduğunuz dizin
+      },
+    });
+    const uri = mongoDb.getUri();
+    await mongoose.connect(uri);
+  } catch (error) {
+    console.error("--------------------", error);
   }
-});
-
-afterAll(async () => {
+};
+const disConnect = async () => {
   await mongoose.disconnect();
-  jest.clearAllTimers();
-  jest.useRealTimers();
-});
+  console.log("------------------------", mongoDb);
 
-global.signin = async (id?: string) => {
+  await mongoDb.stop();
+};
+
+process.env.ACCESS_KEY = "asdfasdf";
+process.env.ACCESS_JWT_EXPIRES_IN = "3d";
+beforeAll(connect);
+
+// beforeEach(async () => {
+//   if (mongoose.connection.db) {
+//     await mongoose.connection.db.dropDatabase();
+//   } else {
+//     throw new Error("Database connection is not established.");
+//   }
+// });
+
+afterAll(disConnect);
+
+global.signin = (id?: string) => {
   const payload = {
     id: id || new mongoose.Types.ObjectId().toHexString(),
     email: "test@test.com",

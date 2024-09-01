@@ -9,7 +9,7 @@ import { Payment } from "../../models/payment";
 it("returns a 404 when purchasing an order that does not exist", async () => {
   await request(app)
     .post("/api/payments")
-    .set("Cookie", await global.signin())
+    .set("Cookie", global.signin())
     .send({
       token: "asldkfj",
       orderId: new mongoose.Types.ObjectId().toHexString(),
@@ -29,7 +29,7 @@ it("returns a 401 when purchasing an order that doesnt belong to the user", asyn
 
   await request(app)
     .post("/api/payments")
-    .set("Cookie", await global.signin())
+    .set("Cookie", global.signin())
     .send({
       token: "asldkfj",
       orderId: order.id,

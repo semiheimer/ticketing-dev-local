@@ -1,7 +1,8 @@
-import { MongoMemoryServer } from "mongodb-memory-server-core";
+import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
 import { app } from "../app";
 import request from "supertest";
+import path from "path";
 let mongo: MongoMemoryServer;
 
 //for test files
@@ -28,17 +29,23 @@ declare global {
 // declare global {
 //   function getCookie(): Promise<string[]>;
 // }
-
+jest.setTimeout(130000);
 beforeAll(async () => {
-  mongo = await MongoMemoryServer.create();
+  mongo = await MongoMemoryServer.create({
+    binary: {
+      version: "7.0.6", // İndirdiğiniz MongoDB sürümü
+      downloadDir: path.resolve(__dirname, "mongodb"), // Binary dosyalarını koyduğunuz dizin
+    },
+  });
   const mongoUri = mongo.getUri();
   await mongoose.connect(mongoUri);
 });
 
 beforeEach(async () => {
-  const collections = await mongoose.connection.db.collections();
-  for (let collection of collections) {
-    await collection.deleteMany({});
+  if (mongoose.connection.db) {
+    await mongoose.connection.db.dropDatabase();
+  } else {
+    throw new Error("Database connection is not established.");
   }
 });
 
@@ -46,7 +53,7 @@ afterAll(async () => {
   if (mongo) {
     await mongo.stop();
   }
-  await mongoose.connection.close();
+  await mongoose.disconnect();
 });
 
 const userData = {
