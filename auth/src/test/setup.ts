@@ -1,15 +1,13 @@
 import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
-import { app } from "../app";
-import request from "supertest";
 import path from "path";
-let mongo: MongoMemoryServer;
+import { JWT } from "@semiheimerco/common";
 
 //for test files
 //! 1.yol
 declare global {
   namespace globalThis {
-    function getCookie(): Promise<string[]>;
+    function signin(id?: string): string;
   }
 }
 
@@ -29,17 +27,33 @@ declare global {
 // declare global {
 //   function getCookie(): Promise<string[]>;
 // }
-jest.setTimeout(130000);
-beforeAll(async () => {
-  mongo = await MongoMemoryServer.create({
-    binary: {
-      version: "7.0.6", // İndirdiğiniz MongoDB sürümü
-      downloadDir: path.resolve(__dirname, "mongodb"), // Binary dosyalarını koyduğunuz dizin
-    },
-  });
-  const mongoUri = mongo.getUri();
-  await mongoose.connect(mongoUri);
-});
+process.env.ACCESS_KEY = "asdfasdf";
+process.env.ACCESS_JWT_EXPIRES_IN = "3d";
+process.env.JWT_KEY = "thknmloy"; // sadece auth'da var
+
+let mongoDb: MongoMemoryServer;
+
+const connect = async () => {
+  try {
+    mongoDb = await MongoMemoryServer.create({
+      binary: {
+        version: "7.0.6",
+        downloadDir: path.resolve(__dirname, "mongodb-memory-server"),
+      },
+    });
+    const uri = mongoDb.getUri();
+    await mongoose.connect(uri, {});
+  } catch (error) {
+    console.error("--------------------", error);
+  }
+};
+
+const disConnect = async () => {
+  await mongoose?.disconnect();
+  await mongoDb?.stop();
+};
+
+beforeAll(connect);
 
 beforeEach(async () => {
   if (mongoose.connection.db) {
@@ -49,12 +63,7 @@ beforeEach(async () => {
   }
 });
 
-afterAll(async () => {
-  if (mongo) {
-    await mongo.stop();
-  }
-  await mongoose.disconnect();
-});
+afterAll(disConnect);
 
 const userData = {
   email: "test06@gmail.com",
@@ -64,13 +73,13 @@ const userData = {
   lastname: "lastname6",
 };
 
-global.getCookie = async () => {
-  const response = await request(app)
-    .post("/api/users/signup")
-    .send(userData)
-    .expect(201);
+global.signin = (id?: string) => {
+  const payload = {
+    id: id || new mongoose.Types.ObjectId().toHexString(),
+    email: "test@test.com",
+  };
 
-  const cookie = response.get("Set-Cookie");
-
-  return cookie;
+  const token = JWT.createAccessJWT(payload);
+  const cookie = `session=${token}`;
+  return cookie; // Return a single string as per function definition
 };

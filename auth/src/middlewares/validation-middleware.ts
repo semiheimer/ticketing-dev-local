@@ -13,7 +13,7 @@ export const validateSignup = withValidationErrors([
     .withMessage("password is required")
     .trim()
     .isLength({ min: 6, max: 20 })
-    .withMessage("Password must be between 4 and 20 characters"),
+    .withMessage("Password must be between 6 and 20 characters"),
   body("username")
     .notEmpty()
     .withMessage("Username is required")
@@ -41,7 +41,7 @@ export const validateSignin = withValidationErrors([
       body("email").notEmpty().withMessage("Email or username is required"),
       body("username").notEmpty().withMessage("Email or username is required"),
     ],
-    { message: "Either email or username is required" },
+    { message: "Either email or username is required" }
   ) as ValidationChain,
   body("email")
     .optional()

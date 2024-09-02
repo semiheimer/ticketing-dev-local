@@ -16,7 +16,7 @@ it("marks an order as cancelled", async () => {
   });
   await ticket.save();
 
-  const user = await global.signin();
+  const user = global.signin();
   // make a request to create an order
   const { body: order } = await request(app)
     .post("/api/orders")
@@ -46,7 +46,7 @@ it("emits a order cancelled event", async () => {
   });
   await ticket.save();
 
-  const user = await global.signin();
+  const user = global.signin();
   // make a request to create an order
   const { body: order } = await request(app)
     .post("/api/orders")
@@ -63,4 +63,3 @@ it("emits a order cancelled event", async () => {
 
   expect(natsWrapper.client.publish).toHaveBeenCalled();
 });
-

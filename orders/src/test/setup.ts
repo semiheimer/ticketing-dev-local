@@ -1,52 +1,57 @@
 import { JWT } from "@semiheimerco/common";
 import { MongoMemoryServer } from "mongodb-memory-server";
 import mongoose from "mongoose";
+import path from "path";
 
 declare global {
-  function signin(): Promise<string>;
+  function signin(): string;
 }
 
 jest.mock("../nats-wrapper");
 
-let mongo: any;
-beforeAll(async () => {
-  process.env.ACCESS_KEY = "asdfasdf";
-  process.env.ACCESS_JWT_EXPIRES_IN = "3d";
-  process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+process.env.ACCESS_KEY = "asdfasdf";
+process.env.ACCESS_JWT_EXPIRES_IN = "3d";
 
+let mongoDb: MongoMemoryServer;
 
- mongo = await MongoMemoryServer.create();
-  const mongoUri = mongo.getUri();
+const connect = async () => {
+  try {
+    mongoDb = await MongoMemoryServer.create({
+      binary: {
+        version: "7.0.6",
+        downloadDir: path.resolve(__dirname, "mongodb-memory-server"),
+      },
+    });
+    const uri = mongoDb.getUri();
+    await mongoose.connect(uri, {});
+  } catch (error) {
+    console.error("--------------------", error);
+  }
+};
+const disConnect = async () => {
+  await mongoose?.disconnect();
+  await mongoDb?.stop();
+};
 
-//   await mongoose.connect(mongoUri, {});
-// },30000);
-await mongoose.connect(mongoUri, {});
-});
+beforeAll(connect);
 
 beforeEach(async () => {
-  jest.clearAllMocks();
-  const collections = await mongoose.connection.db.collections();
-
-  for (let collection of collections) {
-    await collection.deleteMany({});
+  if (mongoose.connection.db) {
+    await mongoose.connection.db.dropDatabase();
+  } else {
+    throw new Error("Database connection is not established.");
   }
 });
 
-afterAll(async () => {
-  if (mongo) {
-    await mongo.stop();
-  }
-  await mongoose.connection.close();
-});
+afterAll(disConnect);
 
-global.signin = async () => {
+global.signin = (id?: string) => {
   const payload = {
-    id: new mongoose.Types.ObjectId().toHexString(),
+    id: id || new mongoose.Types.ObjectId().toHexString(),
     email: "test@test.com",
   };
 
   const token = JWT.createAccessJWT(payload);
   const cookie = `session=${token}`;
-  return cookie;
+  return cookie; // Return a single string as per function definition
 };
-

@@ -14,7 +14,7 @@ it("can only be accessed if the user is signed in", async () => {
 });
 
 it("returns a status other than 401 if the user is signed in", async () => {
-  const cookie = await global.signin();
+  const cookie = global.signin();
   const response = await request(app)
     .post("/api/tickets")
     .set("Cookie", cookie) // set metodu, isteğin başlığına bir cookie ekler
@@ -23,7 +23,7 @@ it("returns a status other than 401 if the user is signed in", async () => {
 });
 
 it("returns an error if an invalid title is provided", async () => {
-  const cookie = await global.signin();
+  const cookie = global.signin();
   await request(app)
     .post("/api/tickets")
     .set("Cookie", cookie)
@@ -43,7 +43,7 @@ it("returns an error if an invalid title is provided", async () => {
 });
 
 it("returns an error if an invalid price is provided", async () => {
-  const cookie = await global.signin();
+  const cookie = global.signin();
   const a = await request(app)
     .post("/api/tickets")
     .set("Cookie", cookie)
@@ -63,7 +63,7 @@ it("returns an error if an invalid price is provided", async () => {
 });
 
 it("creates a ticket with valid inputs", async () => {
-  const cookie = await global.signin();
+  const cookie = global.signin();
   let tickets = await Ticket.find({});
   expect(tickets.length).toEqual(0);
 
@@ -86,7 +86,7 @@ it("creates a ticket with valid inputs", async () => {
 
 it("publishes an event", async () => {
   const title = "asldkfj";
-  const cookie = await global.signin();
+  const cookie = global.signin();
   await request(app)
     .post("/api/tickets")
     .set("Cookie", cookie)
@@ -98,4 +98,3 @@ it("publishes an event", async () => {
 
   expect(natsWrapper.client.publish).toHaveBeenCalled();
 });
-

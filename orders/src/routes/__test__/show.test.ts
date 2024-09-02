@@ -13,7 +13,7 @@ it("fetches the order", async () => {
   });
   await ticket.save();
 
-  const user = await global.signin();
+  const user = global.signin();
   // make a request to build an order with this ticket
   const { body: order } = await request(app)
     .post("/api/orders")
@@ -41,8 +41,8 @@ it("returns an error if one user tries to fetch another users order", async () =
   });
   await ticket.save();
 
-  const user1 = await global.signin();
-  const user2 = await global.signin();
+  const user1 = global.signin();
+  const user2 = global.signin();
   // make a request to build an order with this ticket
   const { body: order } = await request(app)
     .post("/api/orders")
@@ -57,4 +57,3 @@ it("returns an error if one user tries to fetch another users order", async () =
     .send()
     .expect(401);
 });
-

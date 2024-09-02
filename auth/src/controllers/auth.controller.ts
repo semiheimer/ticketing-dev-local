@@ -20,6 +20,7 @@ const authController = {
       lastname,
       role,
     });
+
     await user.save();
 
     const token = JWT.createAccessJWT({ id: user.id, email: user.email });

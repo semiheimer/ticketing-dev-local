@@ -16,7 +16,7 @@ export class PasswordEncrypt {
         keyCode,
         loopCount,
         charCount,
-        encType,
+        encType
       ).toString("hex");
       return hashedPassword;
     } catch (error: any) {

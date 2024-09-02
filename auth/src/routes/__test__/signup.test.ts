@@ -2,7 +2,7 @@ import request from "supertest";
 import { app } from "../../app";
 
 const userData = {
-  email: "test06@gmail.com",
+  email: "test@test.com",
   password: "1234567",
   username: "test06",
   firstname: "findname",
@@ -39,7 +39,7 @@ it("returns a 400 with an invalid password", async () => {
   return request(app)
     .post("/api/users/signup")
     .send({
-      email: "test06@gmail.com",
+      email: "test@test.com",
       password: "12",
       username: "test06",
       firstname: "findname",
@@ -120,6 +120,5 @@ it("sets a cookie after successful signup", async () => {
     .post("/api/users/signup")
     .send(userData)
     .expect(201);
-
   expect(response.get("Set-Cookie")).toBeDefined();
 });

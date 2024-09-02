@@ -21,8 +21,8 @@ it("fetches orders for an particular user", async () => {
   const ticketTwo = await buildTicket();
   const ticketThree = await buildTicket();
 
-  const userOne = await global.signin();
-  const userTwo = await global.signin();
+  const userOne = global.signin();
+  const userTwo = global.signin();
   // Create one order as User #1
   await request(app)
     .post("/api/orders")
@@ -55,4 +55,3 @@ it("fetches orders for an particular user", async () => {
   expect(response.body[0].ticket.id).toEqual(ticketTwo.id);
   expect(response.body[1].ticket.id).toEqual(ticketThree.id);
 });
-

@@ -6,7 +6,7 @@ import { Ticket } from "../../models/ticket-model";
 
 it("returns a 404 if the provided id does not exist", async () => {
   const id = new mongoose.Types.ObjectId().toHexString();
-  const cookie = await global.signin();
+  const cookie = global.signin();
   await request(app)
     .put(`/api/tickets/${id}`)
     .set("Cookie", cookie)
@@ -20,7 +20,7 @@ it("returns a 404 if the provided id does not exist", async () => {
 it("returns a 401 if the user is not authenticated", async () => {
   const title = "concert";
   const price = 20;
-  const cookie = await global.signin();
+  const cookie = global.signin();
   let response: any = "";
   response = await request(app)
     .post("/api/tickets")
@@ -41,7 +41,7 @@ it("returns a 401 if the user is not authenticated", async () => {
 });
 
 it("returns a 401 if the user does not own the ticket", async () => {
-  let cookie = await global.signin();
+  let cookie = global.signin();
   const response = await request(app)
     .post("/api/tickets")
     .set("Cookie", cookie)
@@ -49,7 +49,7 @@ it("returns a 401 if the user does not own the ticket", async () => {
       title: "asldkfj",
       price: 20,
     });
-  cookie = await global.signin();
+  cookie = global.signin();
   await request(app)
     .put(`/api/tickets/${response.body.id}`)
     .set("Cookie", cookie)
@@ -61,7 +61,7 @@ it("returns a 401 if the user does not own the ticket", async () => {
 });
 
 it("returns a 400 if the user provides an invalid title or price", async () => {
-  const cookie = await global.signin();
+  const cookie = global.signin();
 
   const response = await request(app)
     .post("/api/tickets")
@@ -91,7 +91,7 @@ it("returns a 400 if the user provides an invalid title or price", async () => {
 });
 
 it("updates the ticket provided valid inputs", async () => {
-  const cookie = await global.signin();
+  const cookie = global.signin();
 
   const response = await request(app)
     .post("/api/tickets")
@@ -119,7 +119,7 @@ it("updates the ticket provided valid inputs", async () => {
 });
 
 it("publishes an event", async () => {
-  const cookie = await global.signin();
+  const cookie = global.signin();
 
   const response = await request(app)
     .post("/api/tickets")
@@ -142,7 +142,7 @@ it("publishes an event", async () => {
 });
 
 it("rejects updates if the ticket is reserved", async () => {
-  const cookie = await global.signin();
+  const cookie = global.signin();
 
   const response = await request(app)
     .post("/api/tickets")
@@ -167,4 +167,3 @@ it("rejects updates if the ticket is reserved", async () => {
 
   expect(natsWrapper.client.publish).toHaveBeenCalled();
 });
-

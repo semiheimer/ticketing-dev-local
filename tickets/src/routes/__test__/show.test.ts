@@ -23,7 +23,7 @@ it("returns a 404 if the ticket is not found", async () => {
 it("returns the ticket if the ticket is found", async () => {
   const title = "concert";
   const price = 20;
-  const cookie = await global.signin();
+  const cookie = global.signin();
   const response = await request(app)
     .post("/api/tickets")
     .set("Cookie", cookie)
@@ -41,4 +41,3 @@ it("returns the ticket if the ticket is found", async () => {
   expect(ticketResponse.body.title).toEqual(title);
   expect(ticketResponse.body.price).toEqual(price);
 });
-

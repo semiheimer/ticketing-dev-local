@@ -4,16 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start4": "nodemon --exec ts-node-dev src/index.ts",
-    "start1": "tsc --watch && node dist/index.js",
-    "start3": "tsc && node ./dist/index.js",
-    "start:dev": "nodemon --exec pnpm run start",
-    "build": "tsc -w",
-    "start2": "ts-node src/index.ts",
-    "start5": "nodemon --exec ts-node src/index.ts",
+    "start": "ts-node-dev --poll src/index.ts",
     "test": "jest --watchAll --no-cache",
     "test1": "jest --watchAll --detectOpenHandles expiration-complete-listener.test.ts",
-    "start": "ts-node-dev --poll src/index.ts",
     "update": "npx npm-check-updates -u"
   },
   "jest": {
