@@ -8,6 +8,9 @@ declare global {
   function signin(id?: string): string;
 }
 
+process.env.ACCESS_KEY = "asdfasdf";
+process.env.ACCESS_JWT_EXPIRES_IN = "3d";
+
 jest.mock("../nats-wrapper");
 let mongoDb: MongoMemoryServer;
 
@@ -25,24 +28,21 @@ const connect = async () => {
     console.error("--------------------", error);
   }
 };
-const disConnect = async () => {
-  await mongoose.disconnect();
-  console.log("------------------------", mongoDb);
 
-  await mongoDb.stop();
+const disConnect = async () => {
+  await mongoose?.disconnect();
+  await mongoDb?.stop();
 };
 
-process.env.ACCESS_KEY = "asdfasdf";
-process.env.ACCESS_JWT_EXPIRES_IN = "3d";
 beforeAll(connect);
 
-// beforeEach(async () => {
-//   if (mongoose.connection.db) {
-//     await mongoose.connection.db.dropDatabase();
-//   } else {
-//     throw new Error("Database connection is not established.");
-//   }
-// });
+beforeEach(async () => {
+  if (mongoose.connection.db) {
+    await mongoose.connection.db.dropDatabase();
+  } else {
+    throw new Error("Database connection is not established.");
+  }
+});
 
 afterAll(disConnect);
 

@@ -51,6 +51,11 @@ spec:
                 secretKeyRef:
                   name: jwt-secret
                   key: REFRESH_JWT_EXPIRES_IN
+            - name: STRIPE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: stripe-secret
+                  key: STRIPE_KEY
 ---
 apiVersion: v1
 kind: Service
