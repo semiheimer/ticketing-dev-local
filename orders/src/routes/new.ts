@@ -12,8 +12,6 @@ import { OrderCreatedPublisher } from "../events/publishers/order-created-publis
 import { natsWrapper } from "../nats-wrapper";
 import { EXPIRATION_WINDOW_SECONDS } from "../constants";
 
-
-
 const router = express.Router();
 
 router.post(
@@ -62,8 +60,7 @@ router.post(
     });
 
     res.status(201).send(order);
-  },
+  }
 );
 
 export { router as newOrderRouter };
-

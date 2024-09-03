@@ -13,8 +13,6 @@ router.post(
   async (req: Request, res: Response) => {
     const { title, price } = req.body;
 
-    console.log("🚀 ~  title:", req.currentUser);
-
     const ticket = Ticket.build({
       title,
       price,
@@ -31,8 +29,7 @@ router.post(
       version: ticket.version,
     });
     res.status(201).send(ticket);
-  },
+  }
 );
 
 export { router as createTicketRouter };
-

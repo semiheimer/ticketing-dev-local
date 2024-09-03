@@ -16,7 +16,7 @@ it("returns a 404 if the ticket is not found", async () => {
     .get(`/api/tickets/asdasdasd`)
     .send()
     .expect(400);
-  console.log("🚀 ~ it ~ response:", response.StatusCodes);
+
   response = await request(app).get(`/api/tickets/${id}`).send().expect(404);
 });
 
