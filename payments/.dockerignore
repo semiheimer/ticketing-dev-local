@@ -1,4 +1,17 @@
-node_modules
 setup.ts
 **/test/
 **/__test__/
+# Test dosyalarını hariç tutma
+src/**/*.test.ts
+src/__tests__/**
+src/__mocks__/**
+
+# Node modules hariç tutma
+node_modules
+
+# Diğer gereksiz dosyalar
+*.log
+.git
+.gitignore
+Dockerfile
+docker-compose.yml

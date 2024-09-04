@@ -27,7 +27,6 @@ router.post(
     if (!order) {
       throw new NotFoundError();
     }
-    console.log(order.userId, req.currentUser!.id);
 
     if (order.userId !== req.currentUser!.id) {
       throw new UnauthorizedError();
@@ -42,11 +41,11 @@ router.post(
       source: token,
     });
 
-    // const payment = Payment.build({
-    //   orderId,
-    //   stripeId: charge.id,
-    // });
-    // await payment.save();
+    const payment = Payment.build({
+      orderId,
+      stripeId: charge.id,
+    });
+    await payment.save();
     // new PaymentCreatedPublisher(natsWrapper.client).publish({
     //   id: payment.id,
     //   orderId: payment.orderId,
@@ -54,7 +53,7 @@ router.post(
     // });
 
     // res.status(201).send({ id: payment.id });
-    res.send({ success: true });
+    res.status(201).send({ success: true });
   }
 );
 

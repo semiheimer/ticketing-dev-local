@@ -1,19 +1,13 @@
+
 FROM node:alpine
-# RUN apt-get update && apt-get install -y git
 WORKDIR /app
-# RUN mkdir .git
-# RUN rm -rf node_modules
 COPY package.json .
-# RUN npm install -g npm@latest
-# RUN npm install --omit=dev
-# RUN npm install @semiheimerco/common@latest
-# RUN npm audit fix
 RUN npm install --omit=dev --cache /app/.npm-cache
 COPY . .
-
 ARG COMMIT_SHA
 LABEL commit_sha=$COMMIT_SHA
 CMD ["npm","start"]
+
 
 # FROM node:alpine as base
 

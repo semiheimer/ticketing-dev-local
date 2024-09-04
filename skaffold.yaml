@@ -51,7 +51,7 @@ build:
           - src: "src/**/*.ts"
             dest: .
       docker:
-        dockerfile: Dockerfile 
+        dockerfile: Dockerfile
   # local:
   #   push: false
   # googleCloudBuild:
@@ -61,5 +61,4 @@ manifests:
     - ./infra/k8s/*
 # deploy:
 #   kubectl: {}
-
 

@@ -10,7 +10,8 @@ declare global {
 
 process.env.ACCESS_KEY = "asdfasdf";
 process.env.ACCESS_JWT_EXPIRES_IN = "3d";
-
+process.env.STRIPE_KEY =
+  "sk_test_51LXhToAETTjhE7o2xZ00vfMdPLOxCv07614ccSQrHTNliKVXRD5MxNuq2vNrg1Ce61JeDy2ROPYBXLPpN7ik87Do00EErt2zyd";
 jest.mock("../nats-wrapper");
 let mongoDb: MongoMemoryServer;
 
