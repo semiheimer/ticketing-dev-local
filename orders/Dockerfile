@@ -5,9 +5,8 @@ COPY package.json .
 RUN npm install --omit=dev --cache /app/.npm-cache
 COPY . .
 ARG COMMIT_SHA
-LABEL commit_sha=$COMMIT_SHA
-CMD ["npm","start"]
 
+CMD ["npm","start"]
 
 # FROM node:alpine as base
 

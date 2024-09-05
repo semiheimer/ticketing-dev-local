@@ -40,20 +40,23 @@ router.post(
       amount: order.price * 100,
       source: token,
     });
-
     const payment = Payment.build({
       orderId,
       stripeId: charge.id,
     });
     await payment.save();
-    // new PaymentCreatedPublisher(natsWrapper.client).publish({
-    //   id: payment.id,
-    //   orderId: payment.orderId,
-    //   stripeId: payment.stripeId,
-    // });
+    new PaymentCreatedPublisher(natsWrapper.client).publish({
+      id: payment.id,
+      orderId: payment.orderId,
+      stripeId: payment.stripeId,
+    });
+    console.log("Published Payment", {
+      id: payment.id,
+      orderId: payment.orderId,
+      stripeId: payment.stripeId,
+    });
 
-    // res.status(201).send({ id: payment.id });
-    res.status(201).send({ success: true });
+    res.status(201).send({ id: payment.id });
   }
 );
 
