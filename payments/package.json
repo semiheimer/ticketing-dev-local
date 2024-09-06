@@ -9,7 +9,8 @@
     "test1": "jest --detectOpenHandles",
     "update": "npx npm-check-updates -u",
     "test2": "jest --watchAll new.test.ts",
-    "test3": "jest --runInBand --detectOpenHandles"
+    "test3": "jest --runInBand --detectOpenHandles",
+    "build": "tsc -b tsconfig.build.json"
   },
   "jest": {
     "preset": "ts-jest",

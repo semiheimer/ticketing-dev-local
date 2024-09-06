@@ -8,13 +8,13 @@
     "start1": "tsc --watch && node dist/index.js",
     "start3": "tsc && node ./dist/index.js",
     "start:dev": "nodemon --exec pnpm run start",
-    "build": "tsc -w",
     "start2": "ts-node src/index.ts",
     "start5": "nodemon --exec ts-node src/index.ts",
     "test": "jest --watchAll --no-cache",
     "test1": "jest --watchAll --no-cache ticket.test.ts",
     "start": "ts-node-dev --poll src/index.ts",
-    "update": "npx npm-check-updates -u"
+    "update": "npx npm-check-updates -u",
+    "build": "tsc -b tsconfig.build.json"
   },
   "jest": {
     "preset": "ts-jest",

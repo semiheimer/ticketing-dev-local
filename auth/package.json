@@ -8,7 +8,8 @@
     "start": "ts-node-dev --poll src/index.ts",
     "update": "npx npm-check-updates -u",
     "test1": "jest --runInBand --detectOpenHandles",
-    "test2": "jest --watchAll --no-cache signup"
+    "test2": "jest --watchAll --no-cache signup",
+    "build": "tsc -b tsconfig.build.json"
   },
   "jest": {
     "preset": "ts-jest",

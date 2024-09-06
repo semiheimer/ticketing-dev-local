@@ -1,20 +1,18 @@
-FROM node:alpine
-# RUN apt-get update && apt-get install -y git
+# First stage: Build the application
+FROM node:alpine AS builder
 WORKDIR /app
-# RUN mkdir .git
-# RUN rm -rf node_modules
-COPY package.json .
-# RUN npm install -g npm@latest
-# RUN npm install --omit=dev
-# RUN npm install @semiheimerco/common@latest
-# RUN npm audit fix
-RUN npm install --omit=dev --cache /app/.npm-cache
+COPY package.json tsconfig.json tsconfig.build.json ./
+RUN npm install --omit=dev && npm prune --production
 COPY . .
+# Compile TypeScript to JavaScript
+RUN npm run build
 
-ARG COMMIT_SHA
-LABEL commit_sha=$COMMIT_SHA
-CMD ["npm","start"]
-
+# Second stage: Distroless image
+FROM gcr.io/distroless/nodejs22-debian12
+WORKDIR /app
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/dist ./dist
+CMD ["dist/index.js"]
 # FROM node:alpine as base
 
 # ENV PNPM_HOME="/pnpm"

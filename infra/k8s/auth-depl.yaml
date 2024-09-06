@@ -16,8 +16,6 @@ spec:
         - name: auth
           image: semiheimer/auth
           env:
-            - name: NODE_ENV
-              value: "development"
             - name: MONGO_URI
               value: mongodb://auth-mongo-srv:27017/auth
           envFrom:

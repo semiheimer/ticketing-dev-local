@@ -7,7 +7,8 @@
     "start": "ts-node-dev --poll src/index.ts",
     "test": "jest --watchAll --no-cache",
     "test1": "jest --watchAll --detectOpenHandles expiration-complete-listener.test.ts",
-    "update": "npx npm-check-updates -u"
+    "update": "npx npm-check-updates -u",
+    "build": "tsc -b tsconfig.build.json"
   },
   "jest": {
     "preset": "ts-jest",

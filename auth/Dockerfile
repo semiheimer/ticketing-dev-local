@@ -1,19 +1,62 @@
-FROM node:alpine
-# RUN apt-get update && apt-get install -y git
-WORKDIR /app
-# RUN mkdir .git
-# RUN rm -rf node_modules
-COPY package.json .
-# RUN npm install -g npm@latest
-# RUN npm install --omit=dev
-# RUN npm install @semiheimerco/common@latest
-# RUN npm audit fix
-RUN npm install --omit=dev --cache /app/.npm-cache
-COPY . .
+# İlk aşama: bağımlılıkları yükleyin
+FROM node:alpine AS builder
 
-ARG COMMIT_SHA
-LABEL commit_sha=$COMMIT_SHA
-CMD ["npm","start"]
+WORKDIR /app
+
+COPY package.json ./
+RUN npm install --omit=dev && npm prune --production
+
+COPY . .
+RUN npm run build
+# İkinci aşama: busybox imajı
+FROM alpine:latest
+RUN apk add nodejs
+RUN node --version
+WORKDIR /app
+
+# Node.js binary'lerini ve bağımlılıkları ekleyin
+# Not: Bu URL'yi Node.js'in uygun sürümü ile değiştirin
+
+# Sadece gerekli dosyaları kopyalayın
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/dist ./dist
+CMD ["node","dist/index.js"]
+
+
+#######################################
+# # First stage: Build the application
+# FROM node:alpine AS builder
+# WORKDIR /app
+# COPY package.json tsconfig.json tsconfig.build.json ./
+# RUN npm install --omit=dev && npm prune --production
+# COPY . .
+# # Compile TypeScript to JavaScript
+# RUN npm run build
+
+# # Second stage: Distroless image
+# FROM gcr.io/distroless/nodejs22-debian12
+# WORKDIR /app
+# COPY --from=builder /app/node_modules ./node_modules
+# COPY --from=builder /app/dist ./dist
+# CMD ["dist/index.js"]
+########################################
+
+#FROM node:alpine
+# # RUN apt-get update && apt-get install -y git
+# WORKDIR /app
+# # RUN mkdir .git
+# # RUN rm -rf node_modules
+# COPY package.json .
+# # RUN npm install -g npm@latest
+# # RUN npm install --omit=dev
+# # RUN npm install @semiheimerco/common@latest
+# # RUN npm audit fix
+# RUN npm install --omit=dev && npm prune --production
+# COPY . .
+
+# ARG COMMIT_SHA
+# LABEL commit_sha=$COMMIT_SHA
+# CMD ["npm","start"]
 
 # FROM node:alpine as base
 
