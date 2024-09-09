@@ -20,14 +20,14 @@ const useRequest = ({ url, method, body, onSuccess }) => {
       return response.data;
     } catch (err) {
       setErrors(
-        <div className='alert alert-danger'>
+        <div className="alert alert-danger">
           <h4>Ooops....</h4>
-          <ul className='my-0'>
+          <ul className="my-0">
             {err.response.data.errors.map((err) => (
               <li key={err.message}>{err.message}</li>
             ))}
           </ul>
-        </div>,
+        </div>
       );
     }
   };
@@ -35,5 +35,9 @@ const useRequest = ({ url, method, body, onSuccess }) => {
   return { doRequest, errors };
 };
 
-export default useRequest;
+const useRequestPost = (props) => {
+  return useRequest({ ...props, method: "post" });
+};
 
+export default useRequest;
+export { useRequestPost };
