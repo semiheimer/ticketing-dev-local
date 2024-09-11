@@ -35,9 +35,13 @@ const useRequest = ({ url, method, body, onSuccess }) => {
   return { doRequest, errors };
 };
 
-const useRequestPost = (props) => {
+useRequest.post = (props) => {
   return useRequest({ ...props, method: "post" });
 };
 
+// Attaching get method
+useRequest.get = (props) => {
+  return useRequest({ ...props, method: "get" });
+};
+
 export default useRequest;
-export { useRequestPost };

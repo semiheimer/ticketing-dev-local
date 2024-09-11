@@ -1,11 +1,12 @@
 import { useState } from "react";
 import Router from "next/router";
-import { useRequestPost } from "../../hooks/use-request";
+import useRequest from "../../hooks/use-request";
+import Link from "next/link";
 
-const NewTicket = ({ currentUser }) => {
+const NewTicket = () => {
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState("");
-  const { doRequest, errors } = useRequestPost({
+  const { doRequest, errors } = useRequest.post({
     url: "/api/tickets",
     body: {
       title,
@@ -41,7 +42,12 @@ const NewTicket = ({ currentUser }) => {
 
   return (
     <div>
-      <h1>Create a Ticket</h1>
+      <div className="d-flex justify-content-between align-items-center  mb-3">
+        <h1>Create a Ticket</h1>
+        <Link className="btn btn-primary float-end" href="/">
+          Ticket list
+        </Link>
+      </div>
       <form onSubmit={onSubmit}>
         <div className="form-group">
           <label>Title</label>

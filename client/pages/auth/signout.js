@@ -3,9 +3,8 @@ import Router from "next/router";
 import useRequest from "../../hooks/use-request";
 
 const Signout = () => {
-  const { doRequest } = useRequest({
+  const { doRequest } = useRequest.post({
     url: "/api/users/signout",
-    method: "post",
     body: {},
     onSuccess: () => Router.push("/"),
   });
@@ -18,4 +17,3 @@ const Signout = () => {
 };
 
 export default Signout;
-

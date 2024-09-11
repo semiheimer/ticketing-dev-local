@@ -6,8 +6,10 @@ const getUrl = ({ req }) => {
   if (typeof window === "undefined") {
     // We are on the server
     return axios.create({
-      baseURL: "http://auth-srv:3000",
+      baseURL:
+        "http://ingress-nginx-controller.ingress-nginx.svc.cluster.local",
       headers: {
+        Host: "ticketing.dev",
         cookie: req.headers.cookie,
       },
     });

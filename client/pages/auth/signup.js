@@ -6,9 +6,8 @@ import Link from "next/link";
 const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { doRequest, errors } = useRequest({
+  const { doRequest, errors } = useRequest.post({
     url: "/api/users/signup",
-    method: "post",
     body: {
       email,
       password,
