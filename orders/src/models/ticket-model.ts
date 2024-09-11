@@ -44,7 +44,7 @@ const ticketSchema = new mongoose.Schema(
         delete ret.__v;
       },
     },
-  },
+  }
 );
 
 ticketSchema.set("versionKey", "version");
@@ -84,6 +84,7 @@ ticketSchema.methods.isReserved = async function () {
       ],
     },
   });
+  console.log(existingOrder);
 
   return !!existingOrder;
 };
@@ -91,4 +92,3 @@ ticketSchema.methods.isReserved = async function () {
 const Ticket = mongoose.model<TicketDoc, TicketModel>("Ticket", ticketSchema);
 
 export { Ticket };
-

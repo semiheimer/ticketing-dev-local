@@ -5,6 +5,15 @@ import { USER_ROLE } from "../utils/constants";
 import { JWT, UnauthorizedError } from "@semiheimerco/common";
 
 const authController = {
+  list: async (req: Request, res: Response) => {
+    if (!req!.currentUser?.isSuperadmin) {
+      throw new UnauthorizedError("Permission is denied");
+    }
+    const users = await User.find();
+
+    res.status(StatusCodes.OK).send(users);
+  },
+
   signup: async (req: Request, res: Response) => {
     const isFirstAccount = (await User.countDocuments()) === 0;
     const role: USER_ROLE = isFirstAccount
@@ -37,10 +46,15 @@ const authController = {
 
   signin: async (req: Request, res: Response) => {
     const { username, email, password } = req.body;
+    const users = await User.find();
+
+    console.log(users);
+
     const user = await User.findOne({
       $or: [{ username }, { email }],
       password,
     });
+
     if (!user) throw new UnauthorizedError("Invalid credentials");
     if (!user.isActive)
       throw new UnauthorizedError("This account is not active");

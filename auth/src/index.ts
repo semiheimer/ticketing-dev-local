@@ -15,8 +15,8 @@ try {
       console.error("* Could Not Connected to MongoDB *\n", err);
       throw new DatabaseConnectionError();
     });
+  require("./utils/userCreate")();
 } catch (error) {
   console.error(error);
   process.exit(1);
 }
-
