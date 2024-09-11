@@ -5,7 +5,8 @@ import { signinUserRouter } from "./routes/signin";
 import { signoutUserRouter } from "./routes/signout";
 import { signupUserRouter } from "./routes/signup";
 import cookieParser from "cookie-parser";
-import { NotFoundError, errorHandler } from "@semiheimerco/common";
+import { NotFoundError, currentUser, errorHandler } from "@semiheimerco/common";
+import { userListRouter } from "./routes/userlist";
 
 const app = express();
 app.set("trust proxy", true);
@@ -21,11 +22,15 @@ app.use(cookieParser());
 //     httpOnly: false,
 //   }),
 // );
-
+app.use(currentUser);
 app.use(currentUserRouter);
 app.use(signinUserRouter);
 app.use(signoutUserRouter);
 app.use(signupUserRouter);
+app.use((req, res, next) => {
+  console.log("ÇALIŞTIIIIII");
+  next();
+}, userListRouter);
 
 app.all("*", async (req, res) => {
   throw new NotFoundError("Route not available");

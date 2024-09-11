@@ -1,6 +1,6 @@
 import { User } from "../models/user-model";
 
-module.exports = async () => {
+export const userSync = async () => {
   try {
     await User.deleteMany().then(() => console.log(" - User Deleted All"));
     console.log("All users are deleted");
@@ -23,7 +23,6 @@ module.exports = async () => {
     });
     console.log("User created");
     const users = await User.find();
-    console.log(users);
   } catch (error) {
     console.error(error);
   }

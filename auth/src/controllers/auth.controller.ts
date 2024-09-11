@@ -46,9 +46,6 @@ const authController = {
 
   signin: async (req: Request, res: Response) => {
     const { username, email, password } = req.body;
-    const users = await User.find();
-
-    console.log(users);
 
     const user = await User.findOne({
       $or: [{ username }, { email }],
@@ -56,6 +53,7 @@ const authController = {
     });
 
     if (!user) throw new UnauthorizedError("Invalid credentials");
+
     if (!user.isActive)
       throw new UnauthorizedError("This account is not active");
 

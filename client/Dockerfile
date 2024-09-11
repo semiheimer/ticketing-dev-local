@@ -14,4 +14,5 @@ WORKDIR /app
 COPY package.json .
 RUN bun install
 COPY . .
-CMD ["bun","run","dev"]
+CMD ["bun","next","dev"]
+
