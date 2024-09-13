@@ -23,8 +23,8 @@ app.use(cookieParser());
 //   }),
 // );
 app.use(currentUser);
-app.use(userListRouter);
 
+app.use(userListRouter);
 app.use(currentUserRouter);
 app.use(signinUserRouter);
 app.use(signoutUserRouter);

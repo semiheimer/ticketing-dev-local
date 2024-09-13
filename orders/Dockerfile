@@ -1,27 +1,27 @@
-
-FROM node:alpine AS builder
-WORKDIR /app
-COPY package.json tsconfig.json tsconfig.build.json ./
-RUN npm install --omit=dev && npm prune --production
-COPY . .
-# Compile TypeScript to JavaScript
-RUN npm run build
-
-# Second stage: Distroless image
-FROM gcr.io/distroless/nodejs22-debian12
-WORKDIR /app
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/dist ./dist
-CMD ["dist/index.js"]
-####################################
-# FROM node:alpine
-
+# First stage: Build the application
+# FROM node:alpine AS builder
 # WORKDIR /app
-# COPY package.json .
-# RUN npm install --omit=dev
+# COPY package.json tsconfig.json tsconfig.build.json ./
+# RUN npm install --omit=dev && npm prune --production
 # COPY . .
+# # Compile TypeScript to JavaScript
+# RUN npm run build
 
-# CMD ["npm", "start"]
+# # Second stage: Distroless image
+# FROM gcr.io/distroless/nodejs22-debian12
+# WORKDIR /app
+# COPY --from=builder /app/node_modules ./node_modules
+# COPY --from=builder /app/dist ./dist
+# CMD ["dist/index.js"]
+####################################
+FROM node:alpine
+
+WORKDIR /app
+COPY package.json .
+RUN npm install --omit=dev
+COPY . .
+
+CMD ["npm", "start"]
 #######################################
 # FROM node:alpine as base
 

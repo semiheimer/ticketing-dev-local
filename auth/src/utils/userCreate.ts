@@ -7,18 +7,25 @@ export const userSync = async () => {
     const admin = await User.create([
       {
         firstname: "superadmin",
-        lastname: "kutlu",
+        lastname: "superadmin",
         email: "superadmin@gmail.com",
         password: "aA-#123456",
         username: "superadmin",
-        isSuperadmin: true,
+        role: "superadmin",
       },
       {
-        firstname: "semih",
-        lastname: "kutlu",
-        email: "semih@gmail.com",
+        firstname: "John",
+        lastname: "Wayn",
+        email: "john@gmail.com",
         password: "aA-#123456",
-        username: "semiheimer",
+        username: "john06",
+      },
+      {
+        firstname: "Anthony",
+        lastname: "Hopkins",
+        email: "anthony@gmail.com",
+        password: "aA-#123456",
+        username: "anthony06",
       },
     ]);
     console.log("User created");

@@ -16,7 +16,7 @@ const startServer = async () => {
       console.log("Listening on port 3000!!");
     });
     //! productionda silinecek
-    await userSync();
+    // await userSync();
   } catch (error) {
     console.error(
       error instanceof DatabaseConnectionError

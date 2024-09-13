@@ -1,27 +1,11 @@
-# İlk aşama: bağımlılıkları yükleyin
-FROM node:alpine AS builder
+FROM node:alpine
 
 WORKDIR /app
-
-COPY package.json tsconfig.json tsconfig.build.json ./
-RUN npm install --omit=dev && npm prune --production
-
+COPY package.json .
+RUN npm install --omit=dev
 COPY . .
-RUN npm run build
-# İkinci aşama: busybox imajı
-FROM alpine:latest
-RUN apk add nodejs
 
-WORKDIR /app
-
-# Node.js binary'lerini ve bağımlılıkları ekleyin
-# Not: Bu URL'yi Node.js'in uygun sürümü ile değiştirin
-
-# Sadece gerekli dosyaları kopyalayın
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/dist ./dist
-CMD ["node","dist/index.js"]
-
+CMD ["npm", "start"]
 
 #######################################
 # # First stage: Build the application

@@ -6,7 +6,6 @@ import { JWT, UnauthorizedError } from "@semiheimerco/common";
 
 const authController = {
   list: async (req: Request, res: Response) => {
-    console.log("deneme");
     if (!req!.currentUser?.isSuperadmin) {
       throw new UnauthorizedError("Permission is denied");
     }
@@ -58,7 +57,11 @@ const authController = {
     if (!user.isActive)
       throw new UnauthorizedError("This account is not active");
 
-    const token = JWT.createAccessJWT({ id: user.id, email: user.email });
+    const token = JWT.createAccessJWT({
+      id: user.id,
+      email: user.email,
+      isSuperadmin: user.isSuperadmin ? true : false,
+    });
 
     const oneDay = 1000 * 60 * 60 * 24;
 
