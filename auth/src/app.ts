@@ -23,14 +23,12 @@ app.use(cookieParser());
 //   }),
 // );
 app.use(currentUser);
+app.use(userListRouter);
+
 app.use(currentUserRouter);
 app.use(signinUserRouter);
 app.use(signoutUserRouter);
 app.use(signupUserRouter);
-app.use((req, res, next) => {
-  console.log("ÇALIŞTIIIIII");
-  next();
-}, userListRouter);
 
 app.all("*", async (req, res) => {
   throw new NotFoundError("Route not available");

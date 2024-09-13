@@ -1,0 +1,17 @@
+[
+  {
+    "firstname": "superadmin",
+    "lastname": "kutlu",
+    "email": "superadmin@gmail.com",
+    "password": "aA-#123456",
+    "username": "superadmin",
+    "isSuperadmin": true
+  },
+  {
+    "firstname": "semih",
+    "lastname": "kutlu",
+    "email": "semih@gmail.com",
+    "password": "aA-#123456",
+    "username": "semiheimer"
+  }
+]

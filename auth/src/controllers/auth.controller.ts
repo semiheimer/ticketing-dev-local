@@ -6,10 +6,11 @@ import { JWT, UnauthorizedError } from "@semiheimerco/common";
 
 const authController = {
   list: async (req: Request, res: Response) => {
+    console.log("deneme");
     if (!req!.currentUser?.isSuperadmin) {
       throw new UnauthorizedError("Permission is denied");
     }
-    const users = await User.find();
+    const users = await User.find({});
 
     res.status(StatusCodes.OK).send(users);
   },
@@ -62,9 +63,10 @@ const authController = {
     const oneDay = 1000 * 60 * 60 * 24;
 
     res.cookie("session", token, {
-      httpOnly: true,
+      httpOnly: false,
       expires: new Date(Date.now() + oneDay),
-      secure: process.env.NODE_ENV !== "development",
+      // secure: process.env.NODE_ENV !== "development",
+      secure: false,
     });
     res.status(StatusCodes.OK).send(user);
   },

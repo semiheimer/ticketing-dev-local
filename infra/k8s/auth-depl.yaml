@@ -17,7 +17,7 @@ spec:
           image: semiheimer/auth
           env:
             - name: MONGO_URI
-              value: mongodb://auth-mongo-srv:27017/auth
+              value: mongodb+srv://semih:q9nA3WqUkPq2K8rc@cluster0.cmzcdnj.mongodb.net/ticketingAuth
           envFrom:
             - secretRef:
                 name: jwt-secret

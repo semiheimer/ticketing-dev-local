@@ -3,7 +3,7 @@ FROM node:alpine AS builder
 
 WORKDIR /app
 
-COPY package.json ./
+COPY package.json tsconfig.json tsconfig.build.json ./
 RUN npm install --omit=dev && npm prune --production
 
 COPY . .
@@ -11,7 +11,7 @@ RUN npm run build
 # İkinci aşama: busybox imajı
 FROM alpine:latest
 RUN apk add nodejs
-RUN node --version
+
 WORKDIR /app
 
 # Node.js binary'lerini ve bağımlılıkları ekleyin
