@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --watchAll --no-cache",
-    "start": "ts-node-dev --poll --env-file=.env src/index.ts",
+    "start": "ts-node-dev --poll src/index.ts",
+    "withenvstart": "ts-node-dev --poll --env-file=.env src/index.ts",
     "update": "npx npm-check-updates -u",
     "test1": "jest --runInBand --detectOpenHandles",
     "test2": "jest --watchAll --no-cache signup",

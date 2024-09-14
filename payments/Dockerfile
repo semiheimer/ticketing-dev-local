@@ -2,7 +2,9 @@ FROM node:alpine
 
 WORKDIR /app
 COPY package.json .
-RUN npm install --omit=dev
+RUN npm install -g npm@latest
+RUN npm install --omit=dev  && npm prune --production
+RUN npm audit fix
 COPY . .
 
 CMD ["npm", "start"]

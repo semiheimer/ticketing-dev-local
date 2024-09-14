@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 import { Order, OrderStatus } from "./order-model";
-import { doesNotMatch } from "assert";
 
 interface TicketAttrs {
   id: string;
