@@ -7,17 +7,16 @@ const TicketShow = ({ ticket }) => {
     body: {
       ticketId: ticket.id,
     },
-    onSuccess: (order) =>
-      Router.push("/orders/[orderId]", `/orders/${order.id}`),
+    onSuccess: (order) => Router.push(`/orders/${order.id}`),
   });
 
   return (
-    <div className="container">
-      <h1 className="mb-3">{ticket.title}</h1>
+    <div className='container'>
+      <h1 className='mb-3'>{ticket.title}</h1>
       <h4>Price: {ticket.price}</h4>
       {errors}
-      <div className="text-end">
-        <button onClick={doRequest} className="btn btn-primary">
+      <div className='text-end'>
+        <button onClick={doRequest} className='btn btn-primary'>
           Purchase
         </button>
       </div>

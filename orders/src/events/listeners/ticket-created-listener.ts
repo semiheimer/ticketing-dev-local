@@ -20,4 +20,3 @@ export class TicketCreatedListener extends Listener<TicketCreatedEvent> {
     msg.ack();
   }
 }
-

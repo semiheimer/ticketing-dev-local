@@ -35,16 +35,15 @@ router.post(
 
     const existingOrder = await ticket.isReserved();
 
-    // if (existingOrder) {
-    //   if (existingOrder?.userId === req.currentUser!.id) {
-    //     return res.status(200).send({
-    //       message: "You have already reserved this ticket",
-    //       order: existingOrder,
-    //     });
-    //   }
-
-    //   throw new BadRequestError("Ticket is already reserved by another user");
-    // }
+    if (existingOrder) {
+      if (existingOrder.status === OrderStatus.Complete) {
+        throw new BadRequestError("You have already completed this order");
+      }
+      if (existingOrder.userId === req.currentUser!.id) {
+        return res.status(200).send(existingOrder);
+      }
+      throw new BadRequestError("Ticket is already reserved by another user");
+    }
 
     // Calculate an expiration date for this order
     const expiration = new Date();

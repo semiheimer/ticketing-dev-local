@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { updateIfCurrentPlugin } from "mongoose-update-if-current";
-import { Order, OrderStatus } from "./order-model";
+import { Order, OrderStatus, OrderDoc } from "./order-model";
 
 interface TicketAttrs {
   id: string;
@@ -12,7 +12,7 @@ export interface TicketDoc extends mongoose.Document {
   title: string;
   price: number;
   version: number;
-  isReserved(): Promise<boolean>;
+  isReserved(): Promise<OrderDoc | null>;
 }
 
 interface TicketModel extends mongoose.Model<TicketDoc> {
@@ -43,7 +43,7 @@ const ticketSchema = new mongoose.Schema(
         delete ret.__v;
       },
     },
-  }
+  },
 );
 
 ticketSchema.set("versionKey", "version");
@@ -82,8 +82,7 @@ ticketSchema.methods.isReserved = async function () {
         OrderStatus.Complete,
       ],
     },
-  });
-  console.log(existingOrder);
+  }).populate("ticket");
 
   return existingOrder;
 };

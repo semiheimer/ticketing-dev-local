@@ -9,6 +9,7 @@ const OrderShow = ({ order, currentUser }) => {
     url: "/api/payments",
     body: {
       orderId: order.id,
+      token: order.id,
     },
     onSuccess: () => Router.push("/orders"),
   });
@@ -36,7 +37,7 @@ const OrderShow = ({ order, currentUser }) => {
       Time left to pay: {timeLeft} seconds
       <StripeCheckout
         token={({ id }) => doRequest({ token: id })}
-        stripeKey="pk_test_JMdyKVvf8EGTB0Fl28GsN7YY"
+        stripeKey='pk_test_51LXhToAETTjhE7o2Eki4xi8qO3pbJvOK76erG2PmBKPT5XrENZ2i3FavA0wGP2GMgkF3RQmFKcZ3D0jP8QVa6B0j00V3sAikod'
         amount={order.ticket.price * 100}
         email={currentUser.email}
       />
