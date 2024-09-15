@@ -35,16 +35,18 @@ router.post(
       throw new BadRequestError("Cannot pay for an cancelled order");
     }
 
-    const charge = await stripe.charges.create({
+    const paymentIntent = await stripe.paymentIntents.create({
       currency: "usd",
       amount: order.price * 100,
-      source: token,
+      payment_method_types: ["card"],
     });
     const payment = Payment.build({
       orderId,
-      stripeId: charge.id,
+      stripeId: paymentIntent.id,
     });
+
     await payment.save();
+
     new PaymentCreatedPublisher(natsWrapper.client).publish({
       id: payment.id,
       orderId: payment.orderId,
@@ -56,8 +58,8 @@ router.post(
       stripeId: payment.stripeId,
     });
 
-    res.status(201).send({ id: payment.id });
-  }
+    res.status(201).send({ clientSecret: paymentIntent.client_secret });
+  },
 );
 
 export { router as createChargeRouter };
