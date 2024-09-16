@@ -34,12 +34,15 @@ router.post(
     if (order.status === OrderStatus.Cancelled) {
       throw new BadRequestError("Cannot pay for an cancelled order");
     }
-
+    if (order.status === OrderStatus.Complete) {
+      throw new BadRequestError("The order already completed");
+    }
     const paymentIntent = await stripe.paymentIntents.create({
       currency: "usd",
       amount: order.price * 100,
       payment_method_types: ["card"],
     });
+
     const payment = Payment.build({
       orderId,
       stripeId: paymentIntent.id,
@@ -52,6 +55,7 @@ router.post(
       orderId: payment.orderId,
       stripeId: payment.stripeId,
     });
+
     console.log("Published Payment", {
       id: payment.id,
       orderId: payment.orderId,
@@ -59,7 +63,7 @@ router.post(
     });
 
     res.status(201).send({ clientSecret: paymentIntent.client_secret });
-  },
+  }
 );
 
 export { router as createChargeRouter };

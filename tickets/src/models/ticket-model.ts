@@ -30,11 +30,11 @@ const ticketSchema = new mongoose.Schema(
       required: true,
     },
     userId: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
       required: true,
     },
     orderId: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
     },
   },
   {
@@ -45,7 +45,7 @@ const ticketSchema = new mongoose.Schema(
         // delete ret.__v;
       },
     },
-  },
+  }
 );
 
 // ticketSchema.set("toJSON", {

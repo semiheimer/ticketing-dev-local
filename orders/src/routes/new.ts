@@ -37,7 +37,7 @@ router.post(
 
     if (existingOrder) {
       if (existingOrder.status === OrderStatus.Complete) {
-        throw new BadRequestError("You have already completed this order");
+        throw new BadRequestError("The order already completed");
       }
       if (existingOrder.userId === req.currentUser!.id) {
         return res.status(200).send(existingOrder);
@@ -72,7 +72,7 @@ router.post(
     });
 
     res.status(201).send(order);
-  },
+  }
 );
 
 export { router as newOrderRouter };

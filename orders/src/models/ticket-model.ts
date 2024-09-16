@@ -43,7 +43,7 @@ const ticketSchema = new mongoose.Schema(
         delete ret.__v;
       },
     },
-  },
+  }
 );
 
 ticketSchema.set("versionKey", "version");
@@ -82,7 +82,8 @@ ticketSchema.methods.isReserved = async function () {
         OrderStatus.Complete,
       ],
     },
-  }).populate("ticket");
+  });
+  console.log(existingOrder);
 
   return existingOrder;
 };

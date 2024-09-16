@@ -26,7 +26,7 @@ interface OrderModel extends mongoose.Model<OrderDoc> {
 const orderSchema = new mongoose.Schema(
   {
     userId: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
       required: true,
     },
     status: {
@@ -37,6 +37,7 @@ const orderSchema = new mongoose.Schema(
     },
     expiresAt: {
       type: mongoose.Schema.Types.Date,
+      required: true,
     },
     ticket: {
       type: mongoose.Schema.Types.ObjectId,
@@ -51,7 +52,7 @@ const orderSchema = new mongoose.Schema(
         delete ret.__v;
       },
     },
-  },
+  }
 );
 
 orderSchema.set("versionKey", "version");
