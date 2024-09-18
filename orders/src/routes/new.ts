@@ -34,6 +34,7 @@ router.post(
     // }
 
     const existingOrder = await ticket.isReserved();
+    console.log(existingOrder?.userId, req.currentUser!.id);
 
     if (existingOrder) {
       if (existingOrder.status === OrderStatus.Complete) {

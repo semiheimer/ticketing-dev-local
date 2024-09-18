@@ -82,8 +82,8 @@ ticketSchema.methods.isReserved = async function () {
         OrderStatus.Complete,
       ],
     },
-  });
-  console.log(existingOrder);
+  }).populate("ticket");
+  console.log("existingOrder", existingOrder);
 
   return existingOrder;
 };

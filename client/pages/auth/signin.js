@@ -1,11 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Router from "next/router";
 import useRequest from "../../hooks/use-request";
 import Link from "next/link";
+import { toast } from "react-toastify";
+import { useSearchParams } from "next/navigation";
 
 const Signin = () => {
+  const searchParams = useSearchParams();
+  const message = searchParams.get("message");
   const [email, setEmail] = useState("john@gmail.com");
   const [password, setPassword] = useState("aA-#123456");
+
   const { doRequest, errors } = useRequest.post({
     url: "/api/users/signin",
     body: {
@@ -21,32 +26,38 @@ const Signin = () => {
     await doRequest();
   };
 
+  useEffect(() => {
+    if (message) {
+      toast.info(message); // Mesajı toast olarak göster
+    }
+  }, [message]);
+
   return (
-    <form onSubmit={onSubmit} className='container'>
+    <form onSubmit={onSubmit} className="container">
       <h1>Sign In</h1>
-      <div className='form-group'>
+      <div className="form-group">
         <label>Email Address</label>
         <input
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className='form-control'
+          className="form-control"
         />
       </div>
-      <div className='form-group'>
+      <div className="form-group">
         <label>Password</label>
         <input
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          type='password'
-          className='form-control'
+          type="password"
+          className="form-control"
         />
       </div>
       {errors}
-      <button className='btn btn-primary'>Sign In</button>
-      <div className='mt-3'>
+      <button className="btn btn-primary">Sign In</button>
+      <div className="mt-3">
         <p>
           If you don't have an account,{" "}
-          <Link href='/auth/signup'>sign up here</Link>.
+          <Link href="/auth/signup">sign up here</Link>.
         </p>
       </div>
     </form>

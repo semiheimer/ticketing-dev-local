@@ -1,10 +1,13 @@
 import "bootstrap/dist/css/bootstrap.css";
 import Header from "../components/header";
 import getUrl from "../utils/get-Url";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AppComponent = ({ Component, pageProps, currentUser = {} }) => {
   return (
     <div className="container">
+      <ToastContainer />
       <Header currentUser={currentUser} />
       <div className="container">
         <Component currentUser={currentUser} {...pageProps} />
