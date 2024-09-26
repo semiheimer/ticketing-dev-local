@@ -16,7 +16,6 @@ const router = express.Router();
 
 router.post(
   "/api/orders",
-  requireAuth,
   ...validateNewOrder,
   async (req: Request, res: Response) => {
     const { ticketId } = req.body;
@@ -34,13 +33,12 @@ router.post(
     // }
 
     const existingOrder = await ticket.isReserved();
-    console.log(existingOrder?.userId, req.currentUser!.id);
 
     if (existingOrder) {
       if (existingOrder.status === OrderStatus.Complete) {
         throw new BadRequestError("The order already completed");
       }
-      if (existingOrder.userId === req.currentUser!.id) {
+      if (existingOrder?.userId.toString() === req.currentUser!.id) {
         return res.status(200).send(existingOrder);
       }
       throw new BadRequestError("Ticket is already reserved by another user");

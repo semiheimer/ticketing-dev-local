@@ -21,7 +21,6 @@ const NewTicket = () => {
   };
 
   const handleInputChange = (e) => {
-    console.log(e.target.value);
     let inputValue = e.target.value;
 
     const regex = /^[0-9]*\.?[0-9]*$/;

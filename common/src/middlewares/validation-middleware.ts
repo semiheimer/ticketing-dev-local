@@ -9,20 +9,20 @@ import mongoose from "mongoose";
 type ValidationMiddleware = (
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => void;
 
 type ValidationFunction = (
-  validateValues: ValidationChain[],
+  validateValues: ValidationChain[]
 ) => [ValidationChain[], ValidationMiddleware];
 
 export const withValidationErrors: ValidationFunction = (
-  validateValues: ValidationChain[],
+  validateValues: ValidationChain[]
 ) => {
   const middleware: ValidationMiddleware = (
     req: Request,
     res: Response,
-    next: NextFunction,
+    next: NextFunction
   ) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -35,9 +35,10 @@ export const withValidationErrors: ValidationFunction = (
   return [validateValues, middleware];
 };
 
-export const validateIdParam = withValidationErrors([
-  param("id").custom(async (value, { req }) => {
-    const isValidMongoId = mongoose.Types.ObjectId.isValid(value);
-    if (!isValidMongoId) throw new BadRequestError("invalid MongoDB id");
-  }),
-]);
+export const validateIdParam = (paramName: string = "id") =>
+  withValidationErrors([
+    param(paramName).custom(async (value, { req }) => {
+      const isValidMongoId = mongoose.Types.ObjectId.isValid(value);
+      if (!isValidMongoId) throw new BadRequestError("Invalid MongoDB ID");
+    }),
+  ]);

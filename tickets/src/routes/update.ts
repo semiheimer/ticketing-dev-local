@@ -4,6 +4,7 @@ import {
   NotFoundError,
   requireAuth,
   UnauthorizedError,
+  validateIdParam,
 } from "@semiheimerco/common";
 import { Ticket } from "../models/ticket-model";
 import { validateUpdateTicket } from "../middlewares/validation-middleware";
@@ -14,6 +15,7 @@ const router = express.Router();
 
 router.put(
   "/api/tickets/:id",
+  ...validateIdParam(),
   requireAuth,
   ...validateUpdateTicket,
   async (req: Request, res: Response) => {
@@ -21,7 +23,7 @@ router.put(
     if (!ticket) {
       throw new NotFoundError();
     }
-    if (ticket.userId !== req.currentUser!.id) {
+    if (ticket.userId.toString() !== req.currentUser!.id) {
       throw new UnauthorizedError();
     }
 
@@ -45,8 +47,7 @@ router.put(
     });
 
     res.send(ticket);
-  },
+  }
 );
 
 export { router as updateTicketRouter };
-

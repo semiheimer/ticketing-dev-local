@@ -28,7 +28,7 @@ router.post(
       throw new NotFoundError();
     }
 
-    if (order.userId !== req.currentUser!.id) {
+    if (order.userId.toString() !== req.currentUser!.id) {
       throw new UnauthorizedError();
     }
     if (order.status === OrderStatus.Cancelled) {
@@ -41,6 +41,9 @@ router.post(
       currency: "usd",
       amount: order.price * 100,
       payment_method_types: ["card"],
+      metadata: {
+        orderId: order.id,
+      },
     });
 
     const payment = Payment.build({

@@ -13,6 +13,7 @@ const CheckoutForm = ({ order, currentUser }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [clientSecret, setClientSecret] = useState("");
+  const [paymentLoading, setPaymentLoading] = useState(false); // Ödeme işlemi sırasında loading state
   const { doRequest, errors } = useRequest({
     url: "/api/payments",
     method: "post",
@@ -25,7 +26,6 @@ const CheckoutForm = ({ order, currentUser }) => {
   });
 
   useEffect(() => {
-    // Call the doRequest function to get the clientSecret when the component mounts
     doRequest();
   }, []);
 
@@ -38,7 +38,8 @@ const CheckoutForm = ({ order, currentUser }) => {
 
     const cardElement = elements.getElement(CardElement);
 
-    // Confirm the payment with the clientSecret
+    setPaymentLoading(true); // Ödeme işlemi başladı
+
     const { error, paymentIntent } = await stripe.confirmCardPayment(
       clientSecret,
       {
@@ -48,13 +49,13 @@ const CheckoutForm = ({ order, currentUser }) => {
             email: currentUser.email,
           },
         },
-      },
+      }
     );
 
     if (error) {
-      console.error(error);
-    } else if (paymentIntent.status === "succeeded") {
-      // Payment succeeded, navigate to orders page
+      console.error("Payment error:", error.message);
+      setPaymentLoading(false);
+    } else if (paymentIntent && paymentIntent.status === "succeeded") {
       Router.push("/orders");
     }
   };
@@ -62,16 +63,31 @@ const CheckoutForm = ({ order, currentUser }) => {
   return (
     <form onSubmit={handleSubmit}>
       <CardElement />
-      <button type='submit' disabled={!stripe || !clientSecret}>
-        Pay {order.ticket.price} USD
+      <button
+        type="submit"
+        disabled={!stripe || !clientSecret || paymentLoading}
+      >
+        {paymentLoading ? "Processing..." : `Pay ${order.ticket.price} USD`}
       </button>
-      {errors}
+      {errors && <div>{errors}</div>}
     </form>
   );
 };
 
-const OrderShow = ({ order, currentUser }) => {
+const OrderShow = ({ order, currentUser, errorMessage }) => {
   const [timeLeft, setTimeLeft] = useState(0);
+
+  if (!order) {
+    return (
+      <div>
+        <p>{errorMessage}</p>
+      </div>
+    );
+  }
+
+  if (timeLeft <= 0) {
+    return <div>Order Expired</div>;
+  }
 
   useEffect(() => {
     const findTimeLeft = () => {
@@ -87,10 +103,6 @@ const OrderShow = ({ order, currentUser }) => {
     };
   }, [order]);
 
-  if (timeLeft <= 0) {
-    return <div>Order Expired</div>;
-  }
-
   return (
     <div>
       <h4>Time left to pay: {timeLeft} seconds</h4>
@@ -100,15 +112,23 @@ const OrderShow = ({ order, currentUser }) => {
     </div>
   );
 };
+
+// Stripe public key ile stripePromise oluşturuluyor
 const stripePromise = loadStripe(
-  "pk_test_51LXhToAETTjhE7o2Eki4xi8qO3pbJvOK76erG2PmBKPT5XrENZ2i3FavA0wGP2GMgkF3RQmFKcZ3D0jP8QVa6B0j00V3sAikod",
+  "pk_test_51LXhToAETTjhE7o2Eki4xi8qO3pbJvOK76erG2PmBKPT5XrENZ2i3FavA0wGP2GMgkF3RQmFKcZ3D0jP8QVa6B0j00V3sAikod"
 );
-// Fetch the order data during server-side rendering
+
+// getInitialProps: Server-side'da order bilgisi alınıyor
 OrderShow.getInitialProps = async (context, client) => {
   const { orderId } = context.query;
-  const { data } = await client.get(`/api/orders/${orderId}`);
 
-  return { order: data };
+  try {
+    const { data } = await client.get(`/api/orders/${orderId}`);
+    return { order: data };
+  } catch (err) {
+    console.log("err", err);
+    return { order: null, errorMessage: "Order could not be fetched." };
+  }
 };
 
 export default OrderShow;

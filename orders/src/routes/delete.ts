@@ -1,8 +1,8 @@
 import express, { Request, Response } from "express";
 import {
-  requireAuth,
   NotFoundError,
   UnauthorizedError,
+  validateIdParam,
 } from "@semiheimerco/common";
 import { Order, OrderStatus } from "../models/order-model";
 import { StatusCodes } from "http-status-codes";
@@ -13,7 +13,7 @@ const router = express.Router();
 
 router.patch(
   "/api/orders/:orderId",
-  requireAuth,
+  ...validateIdParam("orderId"),
   async (req: Request, res: Response) => {
     const { orderId } = req.params;
 
@@ -22,7 +22,7 @@ router.patch(
     if (!order) {
       throw new NotFoundError();
     }
-    if (order.userId !== req.currentUser!.id) {
+    if (order.userId.toString() !== req.currentUser!.id) {
       throw new UnauthorizedError();
     }
     order.status = OrderStatus.Cancelled;
@@ -38,7 +38,7 @@ router.patch(
     });
 
     res.status(StatusCodes.NO_CONTENT).send(order);
-  },
+  }
 );
 
 export { router as deleteOrderRouter };

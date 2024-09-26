@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.get(
   "/api/tickets/:id",
-  ...validateIdParam,
+  ...validateIdParam(),
   async (req: Request, res: Response) => {
     const ticket = await Ticket.findById(req.params.id);
 
@@ -14,8 +14,7 @@ router.get(
     }
 
     res.send(ticket);
-  },
+  }
 );
 
 export { router as showTicketRouter };
-

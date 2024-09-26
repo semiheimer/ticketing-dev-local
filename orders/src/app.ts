@@ -1,8 +1,13 @@
 import "express-async-errors";
 import express from "express";
 import cookieParser from "cookie-parser";
-import { NotFoundError, currentUser, errorHandler } from "@semiheimerco/common";
-import { indexOrderRouter } from "./routes/index";
+import {
+  NotFoundError,
+  currentUser,
+  errorHandler,
+  requireAuth,
+} from "@semiheimerco/common";
+import { indexOrderRouter } from "./routes/list";
 import { newOrderRouter } from "./routes/new";
 import { showOrderRouter } from "./routes/show";
 import { deleteOrderRouter } from "./routes/delete";
@@ -22,10 +27,11 @@ app.use(cookieParser());
 //   }),
 // );
 app.use(currentUser);
-app.use(deleteOrderRouter);
-app.use(indexOrderRouter);
-app.use(newOrderRouter);
-app.use(showOrderRouter);
+
+app.use(requireAuth, deleteOrderRouter);
+app.use(requireAuth, indexOrderRouter);
+app.use(requireAuth, newOrderRouter);
+app.use(requireAuth, showOrderRouter);
 
 app.all("*", async (req, res) => {
   throw new NotFoundError("Route not available");
@@ -33,4 +39,3 @@ app.all("*", async (req, res) => {
 app.use(errorHandler);
 
 export { app };
-

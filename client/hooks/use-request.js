@@ -8,6 +8,9 @@ const useRequest = ({ url, method, body, onSuccess }) => {
     try {
       setErrors(null);
       const finalBody = { ...body, ...additionalData };
+      // axios.create({
+      //   baseURL: "http://ticketing.dev",
+      // });
       const response = await axios[method](url, finalBody, {});
 
       if (onSuccess) {
@@ -18,14 +21,14 @@ const useRequest = ({ url, method, body, onSuccess }) => {
     } catch (err) {
       console.error(err);
       setErrors(
-        <div className='alert alert-danger'>
+        <div className="alert alert-danger">
           <h4>Ooops....</h4>
-          <ul className='my-0'>
+          <ul className="my-0">
             {err.response.data.errors.map((err) => (
               <li key={err.message}>{err.message}</li>
             ))}
           </ul>
-        </div>,
+        </div>
       );
     }
   };
