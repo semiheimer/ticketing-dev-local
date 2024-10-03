@@ -1,4 +1,4 @@
-import { requireAuth } from "@semiheimerco/common";
+import { requireAuth, UnauthorizedError } from "@semiheimerco/common";
 import express, { Request, Response } from "express";
 import { Ticket } from "../models/ticket-model";
 import { validateCreateTicket } from "../middlewares/validation-middleware";
@@ -11,6 +11,11 @@ router.post(
   requireAuth,
   ...validateCreateTicket,
   async (req: Request, res: Response) => {
+    if (!req.currentUser!.isSuperAdmin) {
+      throw new UnauthorizedError(
+        "You are not authorized to create a new ticket"
+      );
+    }
     const { title, price } = req.body;
 
     const ticket = Ticket.build({

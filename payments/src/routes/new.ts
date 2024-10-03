@@ -23,7 +23,6 @@ router.post(
     const { token, orderId } = req.body;
 
     const order = await Order.findById(orderId);
-
     if (!order) {
       throw new NotFoundError();
     }
@@ -32,40 +31,48 @@ router.post(
       throw new UnauthorizedError();
     }
     if (order.status === OrderStatus.Cancelled) {
-      throw new BadRequestError("Cannot pay for an cancelled order");
+      throw new BadRequestError("Cannot pay for a cancelled order");
     }
     if (order.status === OrderStatus.Complete) {
-      throw new BadRequestError("The order already completed");
+      throw new BadRequestError("The order is already completed");
     }
-    const paymentIntent = await stripe.paymentIntents.create({
-      currency: "usd",
-      amount: order.price * 100,
-      payment_method_types: ["card"],
-      metadata: {
-        orderId: order.id,
-      },
-    });
 
-    const payment = Payment.build({
-      orderId,
-      stripeId: paymentIntent.id,
-    });
+    try {
+      const paymentIntent = await stripe.paymentIntents.create({
+        currency: "usd",
+        amount: order.price * 100,
+        payment_method_types: ["card"],
+        metadata: {
+          orderId: order.id,
+        },
+      });
 
-    await payment.save();
+      const payment = Payment.build({
+        orderId,
+        stripeId: paymentIntent.id,
+      });
 
-    new PaymentCreatedPublisher(natsWrapper.client).publish({
-      id: payment.id,
-      orderId: payment.orderId,
-      stripeId: payment.stripeId,
-    });
+      await payment.save();
 
-    console.log("Published Payment", {
-      id: payment.id,
-      orderId: payment.orderId,
-      stripeId: payment.stripeId,
-    });
+      new PaymentCreatedPublisher(natsWrapper.client).publish({
+        id: payment.id,
+        orderId: payment.orderId,
+        stripeId: payment.stripeId,
+      });
 
-    res.status(201).send({ clientSecret: paymentIntent.client_secret });
+      console.log("Published Payment", {
+        id: payment.id,
+        orderId: payment.orderId,
+        stripeId: payment.stripeId,
+      });
+
+      res.status(201).send({ clientSecret: paymentIntent.client_secret });
+    } catch (error) {
+      console.error("Payment failed:", error);
+      res
+        .status(500)
+        .send({ error: "Payment processing failed. Please try again." });
+    }
   }
 );
 

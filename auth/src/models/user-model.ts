@@ -12,7 +12,7 @@ interface UserAttrs {
   lastname: string;
   isActive?: boolean;
   //   is_staff: boolean;
-  isSuperadmin?: Boolean;
+  isSuperAdmin?: Boolean;
   //   location: string;
   //   last_login: Date;
   role: USER_ROLE;
@@ -27,7 +27,7 @@ interface UserDoc extends mongoose.Document {
   firstname: string;
   lastname: string;
   isActive?: Boolean;
-  isSuperadmin?: Boolean;
+  isSuperAdmin?: Boolean;
   role: USER_ROLE;
 }
 
@@ -93,7 +93,7 @@ const userSchema = new mongoose.Schema(
     //   default: false,
     // },
 
-    isSuperadmin: {
+    isSuperAdmin: {
       type: Boolean,
       default: function (document: UserDoc) {
         return document.role === USER_ROLE.SUPERADMIN;
@@ -119,7 +119,7 @@ const userSchema = new mongoose.Schema(
   {
     collection: "users",
     timestamps: true,
-  },
+  }
 );
 
 // FOR REACT PROJECT:
@@ -188,9 +188,9 @@ userSchema.set("toJSON", {
 
 // userSchema.pre("save", function (next) {
 //   if (this.role === USER_ROLE.SUPERADMIN) {
-//     this.isSuperadmin = true;
+//     this.isSuperAdmin = true;
 //   } else {
-//     this.isSuperadmin = false;
+//     this.isSuperAdmin = false;
 //   }
 //   next();
 // });

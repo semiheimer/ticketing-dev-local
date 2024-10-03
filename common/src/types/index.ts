@@ -1,7 +1,7 @@
 export interface UserPayload {
   id: string;
   email: string;
-  isSuperadmin?: boolean;
+  isSuperAdmin?: boolean;
 }
 
 declare global {

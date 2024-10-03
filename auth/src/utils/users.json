@@ -5,7 +5,7 @@
     "email": "superadmin@gmail.com",
     "password": "aA-#123456",
     "username": "superadmin",
-    "isSuperadmin": true
+    "isSuperAdmin": true
   },
   {
     "firstname": "semih",
