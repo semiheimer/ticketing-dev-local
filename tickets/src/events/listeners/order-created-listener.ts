@@ -11,6 +11,7 @@ export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
   async onMessage(data: OrderCreatedEvent["data"], msg: Message) {
     // Find the ticket that the order is reserving
     const ticket = await Ticket.findById(data.ticket.id);
+    console.log("orderCreatedEvent", data);
 
     // If no ticket, throw error
     if (!ticket) {
@@ -18,7 +19,7 @@ export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
     }
 
     // Mark the ticket as being reserved by setting its orderId property
-    ticket.set({ orderId: data.id });
+    ticket.set({ orderId: data.id, reservedBy: data.userId });
 
     // Save the ticket
     await ticket.save();
@@ -35,4 +36,3 @@ export class OrderCreatedListener extends Listener<OrderCreatedEvent> {
     msg.ack();
   }
 }
-

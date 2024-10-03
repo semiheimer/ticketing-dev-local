@@ -15,13 +15,13 @@ const LandingPage = ({ tickets = [] }) => {
 
   return (
     <div>
-      <div className='d-flex justify-content-between align-items-center mb-3'>
+      <div className="d-flex justify-content-between align-items-center mb-3">
         <h1>Tickets</h1>
-        <Link className='btn btn-primary float-end' href='/tickets/new'>
+        <Link className="btn btn-primary float-end" href="/tickets/new">
           Add New Ticket
         </Link>
       </div>
-      <table className='table'>
+      <table className="table">
         <thead>
           <tr>
             <th>Title</th>
@@ -37,6 +37,7 @@ const LandingPage = ({ tickets = [] }) => {
 
 LandingPage.getInitialProps = async (context, client) => {
   const { data } = await client.get("/api/tickets");
+
   return { tickets: data };
 };
 

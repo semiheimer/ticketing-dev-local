@@ -15,6 +15,9 @@ spec:
       containers:
         - name: client
           image: semiheimer/client
+          env:
+            - name: NEXT_PUBLIC_STRIPE_PUBLIC
+              value: pk_test_51LXhToAETTjhE7o2Eki4xi8qO3pbJvOK76erG2PmBKPT5XrENZ2i3FavA0wGP2GMgkF3RQmFKcZ3D0jP8QVa6B0j00V3sAikod
 ---
 apiVersion: v1
 kind: Service
@@ -28,4 +31,3 @@ spec:
       protocol: TCP
       port: 3000
       targetPort: 3000
-

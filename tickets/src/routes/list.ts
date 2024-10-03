@@ -5,8 +5,13 @@ const router = express.Router();
 
 router.get("/api/tickets", async (req: Request, res: Response) => {
   const tickets = await Ticket.find({});
-  // const tickets = await Ticket.find({ orderId: undefined });
-  res.send(tickets);
+  const filteredTickets = tickets.filter((ticket) => {
+    return (
+      !ticket?.reservedBy ||
+      (req.currentUser && ticket?.reservedBy === req.currentUser.id)
+    );
+  });
+  res.send(filteredTickets);
 });
 
 export { router as indexTicketRouter };

@@ -76,12 +76,13 @@ const authController = {
 
   currentUser: (req: Request, res: Response) => {
     const { session } = req.cookies;
+
     res.status(StatusCodes.OK).send({ currentUser: req.currentUser || null });
   },
 
   signout: (req: Request, res: Response) => {
     res.cookie("session", "logout", {
-      httpOnly: true,
+      httpOnly: false,
       expires: new Date(Date.now()),
       secure: process.env.NODE_ENV !== "development",
     });

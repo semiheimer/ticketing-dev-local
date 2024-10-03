@@ -13,7 +13,7 @@ const CheckoutForm = ({ order, currentUser }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [clientSecret, setClientSecret] = useState("");
-  const [paymentLoading, setPaymentLoading] = useState(false);
+  const [paymentLoading, setPaymentLoading] = useState(false); // Ödeme işlemi sırasında loading state
   const { doRequest, errors } = useRequest({
     url: "/api/payments",
     method: "post",
@@ -38,7 +38,7 @@ const CheckoutForm = ({ order, currentUser }) => {
 
     const cardElement = elements.getElement(CardElement);
 
-    setPaymentLoading(true);
+    setPaymentLoading(true); // Ödeme işlemi başladı
 
     const { error, paymentIntent } = await stripe.confirmCardPayment(
       clientSecret,
@@ -99,6 +99,10 @@ const OrderShow = ({ order, currentUser, errorMessage }) => {
     };
   }, [order]);
 
+  if (timeLeft <= 0) {
+    return <div>Order Expired</div>;
+  }
+
   return (
     <div>
       <h4>Time left to pay: {timeLeft} seconds</h4>
@@ -109,10 +113,10 @@ const OrderShow = ({ order, currentUser, errorMessage }) => {
   );
 };
 
-// Stripe public key to initialize Stripe
+// Stripe public key ile stripePromise oluşturuluyor
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC);
 
-// Fetch order details on the server-side
+// getInitialProps: Server-side'da order bilgisi alınıyor
 OrderShow.getInitialProps = async (context, client) => {
   const { orderId } = context.query;
 
@@ -121,7 +125,7 @@ OrderShow.getInitialProps = async (context, client) => {
     return { order: data };
   } catch (err) {
     console.log("err", err);
-    return { order: null, errorMessage: err.message };
+    return { order: null, errorMessage: "Order could not be fetched." };
   }
 };
 

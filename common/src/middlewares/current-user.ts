@@ -1,20 +1,32 @@
 import { NextFunction, Request, Response } from "express";
 import { UserPayload } from "../types";
 import { JWT } from "../helpers/jwtHelpers";
+import { TokenExpiredError } from "jsonwebtoken";
 
 export const currentUser = (
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => {
   const { session } = req.cookies;
-  if (!session) {
-    req.currentUser = null;
-    return next();
-  }
+  req.currentUser = null;
+
+  if (!session) return next();
+
   try {
     const payload = JWT.verifyAccessJWT(session) as UserPayload;
     req.currentUser = payload;
-  } catch (error) {}
+  } catch (error) {
+    res.clearCookie("session", {
+      httpOnly: false,
+      secure: process.env.NODE_ENV !== "development",
+    });
+
+    if (error instanceof TokenExpiredError) {
+      console.error("JWT expired");
+    } else {
+      console.error("JWT verification error");
+    }
+  }
   next();
 };
