@@ -4,7 +4,7 @@ import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 interface TicketAttrs {
   title: string;
   price: number;
-  userId: string;
+  createdBy: string;
 }
 
 interface TicketDoc extends mongoose.Document {
@@ -14,6 +14,7 @@ interface TicketDoc extends mongoose.Document {
   version: number;
   orderId?: string;
   reservedBy?: string;
+  createdBy: string;
 }
 
 interface TicketModel extends mongoose.Model<TicketDoc> {
@@ -38,6 +39,9 @@ const ticketSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
     },
     reservedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+    },
+    createdBy: {
       type: mongoose.Schema.Types.ObjectId,
     },
   },

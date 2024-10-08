@@ -63,11 +63,12 @@ const authController = {
       isSuperAdmin: !!user.isSuperAdmin,
     });
 
-    const oneDay = 1000 * 60 * 60 * 24;
+    // const oneDay = 1000 * 60 * 60 * 24;
+    const oneHour = 1000 * 60;
 
     res.cookie("session", token, {
       httpOnly: false,
-      expires: new Date(Date.now() + oneDay),
+      expires: new Date(Date.now() + oneHour),
       // secure: process.env.NODE_ENV !== "development",
       secure: false,
     });

@@ -11,7 +11,7 @@ router.post(
   requireAuth,
   ...validateCreateTicket,
   async (req: Request, res: Response) => {
-    if (!req.currentUser!.isSuperAdmin) {
+    if (req.currentUser && !!req.currentUser.isSuperAdmin) {
       throw new UnauthorizedError(
         "You are not authorized to create a new ticket"
       );
@@ -21,7 +21,7 @@ router.post(
     const ticket = Ticket.build({
       title,
       price,
-      userId: req.currentUser!.id,
+      createdBy: req.currentUser!.id,
     });
 
     await ticket.save();

@@ -9,6 +9,6 @@ export interface TicketCreatedEvent {
     price: number;
     userId: string;
     orderId?: string;
+    createdBy: string;
   };
 }
-
